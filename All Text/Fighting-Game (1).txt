@@ -1,0 +1,1074 @@
+# include "iGraphics.h"
+#define width 1520
+#define height 790
+#define jumpLimit 100
+#define bcupSpeed 10
+#define bclowSpeed 10
+
+bool villOn = true;				//collision of bullet & villain
+
+bool tOn = true;				//villain after zombie
+
+bool xOn = true;				//zombie after boss
+
+bool heroOn = true;				//collision of hero & boss fire
+
+bool bulon = true;
+
+bool musicon = true;
+
+bool life1 = true;
+bool life2;
+bool life3;
+bool life4;
+bool life5;
+bool life6;
+bool life7;
+
+bool running = true;
+
+struct buttonCoordinate{
+	int x;
+	int y;
+}bCoordinate[5];
+
+int mposx,  mposy;
+
+void change();
+
+void indexChange();
+void index1();
+
+void defIndex();
+void villain();
+void move();
+void setAll();
+
+void collisionStand();
+void collision();
+
+char button[10][25] = { "g\\button_play.bmp", "g\\button_score.bmp", "g\\button_instruction.bmp", "g\\button_about.bmp", "g\\button_exit.bmp" };
+char name[20] = "g\\main.bmp";
+char home[14] = "g\\ryu.bmp";
+char play[20] = "g\\amlan.bmp";
+char score[20] = "g\\abt1.bmp";
+char ins[20] = "g\\about.bmp";
+char about[20] = "g\\1231.bmp";
+char bg[20] = "g\\c.bmp";
+char z[20] = "g\\white\\1.bmp";
+char z1[20] = "g\\white\\2.bmp";
+char game[30] = "g\\122.bmp";
+
+char bimage[20] = "g\\niloy1.bmp";					//for bullet
+char fimage[20] = "g\\fide.bmp";									//for fire
+char zimage[20] = "g\\90.bmp";		//for zombie
+char eimage[30] = "AKUMA\\Shyoken\\17.bmp";
+
+char bcup[20][30] = { "g\\BackgroundUp\\1.bmp", "g\\BackgroundUp\\2.bmp", "g\\BackgroundUp\\3.bmp", "g\\BackgroundUp\\4.bmp", "g\\BackgroundUp\\5.bmp", "g\\BackgroundUp\\6.bmp", "g\\BackgroundUp\\7.bmp", "g\\BackgroundUp\\8.bmp", "g\\BackgroundUp\\9.bmp", "g\\BackgroundUp\\10.bmp", "g\\BackgroundUp\\11.bmp", "g\\BackgroundUp\\12.bmp", "g\\BackgroundUp\\13.bmp", "g\\BackgroundUp\\14.bmp", "g\\BackgroundUp\\15.bmp", "g\\BackgroundUp\\16.bmp", "g\\BackgroundUp\\17.bmp", "g\\BackgroundUp\\18.bmp", "g\\BackgroundUp\\19.bmp", "g\\BackgroundUp\\20.bmp" };
+char bclow[20][30] = { "g\\BackgroundLow\\1.bmp", "g\\BackgroundLow\\2.bmp", "g\\BackgroundLow\\3.bmp", "g\\BackgroundLow\\4.bmp", "g\\BackgroundLow\\5.bmp", "g\\BackgroundLow\\6.bmp", "g\\BackgroundLow\\7.bmp", "g\\BackgroundLow\\8.bmp", "g\\BackgroundLow\\9.bmp", "g\\BackgroundLow\\10.bmp", "g\\BackgroundLow\\11.bmp", "g\\BackgroundLow\\12.bmp", "g\\BackgroundLow\\13.bmp", "g\\BackgroundLow\\14.bmp", "g\\BackgroundLow\\15.bmp", "g\\BackgroundLow\\16.bmp", "g\\BackgroundLow\\17.bmp", "g\\BackgroundLow\\18.bmp", "g\\BackgroundLow\\19.bmp", "g\\BackgroundLow\\20.bmp" };
+
+int index = 0;
+
+char heroForward[11][30] = { "g\\Forward\\1.bmp", "g\\Forward\\2.bmp", "g\\Forward\\3.bmp", "g\\Forward\\4.bmp", "g\\Forward\\5.bmp", "g\\Forward\\6.bmp", "g\\Forward\\7.bmp", "g\\Forward\\8.bmp", "g\\Forward\\9.bmp", "g\\Forward\\10.bmp", "g\\Forward\\11.bmp" };
+
+char heroJump[33][30] = { "g\\Jump\\1.bmp", "g\\Jump\\2.bmp", "g\\Jump\\3.bmp", "g\\Jump\\4.bmp", "g\\Jump\\5.bmp", "g\\Jump\\6.bmp", "g\\Jump\\7.bmp", "g\\Jump\\8.bmp", "g\\Jump\\9.bmp", "g\\Jump\\10.bmp", "g\\Jump\\11.bmp", "g\\Jump\\12.bmp", "g\\Jump\\13.bmp", "g\\Jump\\14.bmp", "g\\Jump\\15.bmp", "g\\Jump\\16.bmp", "g\\Jump\\17.bmp", "g\\Jump\\18.bmp", "g\\Jump\\19.bmp", "g\\Jump\\20.bmp", "g\\Jump\\21.bmp", "g\\Jump\\22.bmp", "g\\Jump\\23.bmp", "g\\Jump\\24.bmp", "g\\Jump\\25.bmp", "g\\Jump\\26.bmp", "g\\Jump\\27.bmp", "g\\Jump\\28.bmp", "g\\Jump\\29.bmp", "g\\Jump\\30.bmp", "g\\Jump\\31.bmp", "g\\Jump\\32.bmp", "g\\Jump\\33.bmp" };
+
+char defence[10][30] = { "g\\Defence\\1.bmp", "g\\Defence\\2.bmp", "g\\Defence\\3.bmp", "g\\Defence\\4.bmp", "g\\Defence\\5.bmp", "g\\Defence\\6.bmp", "g\\Defence\\7.bmp", "g\\Defence\\8.bmp", "g\\Defence\\9.bmp", "g\\Defence\\10.bmp" };
+
+char herokick[16][30] = { "g\\Kick\\0.bmp", "g\\Kick\\1.bmp", "g\\Kick\\2.bmp", "g\\Kick\\3.bmp", "g\\Kick\\4.bmp", "g\\Kick\\5.bmp", "g\\Kick\\6.bmp", "g\\Kick\\7.bmp", "g\\Kick\\8.bmp", "g\\Kick\\9.bmp", "g\\Kick\\10.bmp", "g\\Kick\\11.bmp", "g\\Kick\\12.bmp", "g\\Kick\\13.bmp", "g\\Kick\\14.bmp" };
+
+//char power[18][30] = { "g\\Power\\0.bmp", "g\\Power\\1.bmp", "g\\Power\\2.bmp", "g\\Power\\3.bmp", "g\\Power\\4.bmp", "g\\Power\\5.bmp", "g\\Power\\6.bmp", "g\\Power\\7.bmp", "g\\Power\\8.bmp", "g\\Power\\9.bmp", "g\\Power\\10.bmp", "g\\Power\\11.bmp", "g\\Power\\12.bmp", "g\\Power\\13.bmp", "g\\Power\\14.bmp", "g\\Power\\15.bmp", "g\\Power\\16.bmp", "g\\Power\\17.bmp" };
+
+//char punch[13][30] = { "g\\Punch\\0.bmp", "g\\Power\\1.bmp", "g\\Power\\2.bmp", "g\\Power\\3.bmp", "g\\Power\\4.bmp", "g\\Power\\5.bmp", "g\\Power\\6.bmp", "g\\Power\\7.bmp", "g\\Power\\8.bmp", "g\\Power\\9.bmp", "g\\Power\\10.bmp", "g\\Power\\11.bmp", "g\\Power\\12.bmp" };
+
+char stand[20] = { "g\\st\\1.bmp" };
+
+char at[30] = { "AKUMA\\Shyoken\\2.bmp" };
+
+char vilforward[15][30] = { "AKUMA\\Forward\\1.bmp", "AKUMA\\Forward\\2.bmp", "AKUMA\\Forward\\3.bmp", "AKUMA\\Forward\\4.bmp", "AKUMA\\Forward\\5.bmp", "AKUMA\\Forward\\6.bmp", "AKUMA\\Forward\\7.bmp", "AKUMA\\Forward\\8.bmp", "AKUMA\\Forward\\9.bmp", "AKUMA\\Forward\\10.bmp", "AKUMA\\Forward\\11.bmp", "AKUMA\\Forward\\12.bmp", "AKUMA\\Forward\\13.bmp", "AKUMA\\Forward\\14.bmp", "AKUMA\\Forward\\15.bmp" };
+
+
+char life[7][20] = { "g\\white\\3.bmp", "g\\white\\4.bmp", "g\\white\\5.bmp", "g\\white\\6.bmp", "g\\white\\7.bmp", "g\\white\\8.bmp", "g\\white\\9.bmp" };
+
+//char vil1for[5][30] = { "g\\new\\1.bmp", "g\\new\\2.bmp", "g\\new\\3.bmp", "g\\new\\4.bmp", "g\\new\\5.bmp" };
+//char edg[20] = "g\\new\\3.bmp";
+
+int gstate = -2;
+
+int heroX = 100;
+int heroY = 100;				//for main hero
+int heroIndex = 0;
+int kickindex = 0;
+
+int vilX = 800;
+int vilY = 100;					//for villain
+int vilIndex = 0;
+
+int vil1x = 1200;
+int vil1y = 0;					//for boss
+int villindex = 0;
+
+
+
+bool jump = false;
+bool jumpup = false;
+
+bool kick = false;
+bool kicky = false;
+
+bool def = false;
+
+bool standPos = true;
+int standCounter = 0;
+
+int testJump = 0;
+int testDef = 0;
+int testkick = 0;
+
+
+int jumpCoordinate = 0;
+int defCordinate = 0;
+
+//int scoree = 0, bestscore, bs, sc;
+
+//char sa[10], s1[10], s2[10];
+
+struct background{
+
+	int a; 
+	int b;
+};
+
+background upperbc[20];
+background lowerbc[20];
+
+struct bullet{
+	bool b1On;
+	int x;
+	int y;
+};
+
+bullet b1[100];
+int b1Index = 0;
+
+struct fire{
+	bool fOn;
+	int x;
+	int y;
+};
+
+fire f[100];
+int fIndex = 0;
+
+struct zombie{
+	bool zoOn;
+	int x; 
+	int y;
+};
+
+zombie zo[100];
+int zoIndex = 0;
+
+struct villain1{						//for boss
+	bool v1On;
+	int x;
+	int y;
+
+};
+villain1 v1[100];
+int v1Index = 0;
+
+struct energy{
+	bool eOn;
+	int x;
+	int y;
+
+};
+
+energy e[100];
+int eIndex = 0;
+
+
+/*
+	function iDraw() is called again and again by the system.
+*/
+void iDraw()
+{
+	//place your drawing codes here
+	iClear();
+
+	/*FILE *fp = fopen("data1.txt", "r");
+
+	fscanf(fp, "%d", &bestscore);
+	sprintf(s1, "%d", bestscore);
+
+	fclose(fp);*/
+
+	if (gstate == -2)
+	{
+		iShowBMP(0, 0, name);
+	}
+
+
+	else if (gstate == -1)
+	{
+		//home
+		iShowBMP(0, 0, home);
+
+		for (int i = 0; i < 5; i++)
+		{
+			iShowBMP2(bCoordinate[i].x, bCoordinate[i].y, button[i], 0);
+		}
+
+	}
+	else if (gstate == 0)
+	{
+		//pressing play button
+
+
+		for (int i = 0; i < 20; i++)
+		{
+			iShowBMP(upperbc[i].a, upperbc[i].b, bcup[i]);
+
+			iShowBMP(lowerbc[i].a, lowerbc[i].b, bclow[i]);
+		}
+
+
+		iShowBMP(0, 0, z);
+
+		iShowBMP(1482, 0, z1);
+
+		if (life1)iShowBMP(10, 5, life[0]);
+
+		if (life2)iShowBMP(10, 5, life[1]);
+
+		if (life3)iShowBMP(10, 5, life[2]);
+
+		if (life4)iShowBMP(10, 5, life[3]);
+
+		if (life5)iShowBMP(10, 5, life[4]);
+
+		if (life6)iShowBMP(10, 5, life[5]);
+
+		if (life7)iShowBMP(10, 5, life[6]);
+
+
+
+		//iSetColor(0, 255, 0);
+		//iText(50, 450, sa, GLUT_BITMAP_TIMES_ROMAN_24);
+
+		/*if (scoree > bestscore){
+
+			fp = fopen("data1.txt", "w");
+
+			fprintf(fp, "%d", scoree);
+			fclose(fp);*/
+
+
+
+			if (kicky)
+			{
+				if (kick)
+				{
+					iShowBMP2(heroX, heroY, herokick[testkick], 16777215);
+				}
+				else
+				{
+					iShowBMP2(heroX, heroY, herokick[0], 16777215);
+				}
+			}
+			else if (jump)
+			{
+				if (jumpup)
+				{
+					if (heroOn)iShowBMP2(heroX, heroY + jumpCoordinate, heroJump[testJump], 0);
+					if (villOn)iShowBMP2(vilX, vilY, vilforward[vilIndex], 0);
+				}
+				else
+					if (heroOn)iShowBMP2(heroX, heroY + jumpCoordinate, heroJump[0], 0);
+				if (villOn)iShowBMP2(vilX, vilY, vilforward[vilIndex], 0);
+
+			}
+
+			else if (def)
+			{
+				iShowBMP2(heroX + defCordinate, heroY, defence[testDef], 16777215);
+			}
+
+
+			else
+			{
+				if (!standPos)
+				{
+
+					if (heroOn)iShowBMP2(heroX, heroY, heroForward[heroIndex], 0);
+					//iShowBMP2(heroX, heroY, herokick[kickindex], 16777215);
+					if (villOn)iShowBMP2(vilX, vilY, vilforward[vilIndex], 0);
+
+
+
+
+
+					standCounter++;
+
+					if (standCounter >= 20)
+					{
+						standCounter = 0;
+						heroIndex = 0;
+						kickindex = 0;
+						vilIndex = 0;
+						standPos = true;
+						b1[b1Index].b1On = false;
+					}
+				}
+
+				else
+				{
+					if (heroOn)iShowBMP2(heroX, heroY, "g\\tanm.bmp", 0);
+					if (villOn){ iShowBMP2(vilX, vilY, at, 0); }
+					//iShowBMP2(vil1x, vil1y, "g\\new\\3.bmp", 16777215);
+				}
+			}
+
+			for (int i = 0; i < 100; i++)
+			{
+
+				if (b1[i].b1On)
+				{
+					iShowBMP2(b1[i].x, b1[i].y, bimage, 16777215);
+
+				}
+
+				if (f[i].fOn)
+				{
+					iShowBMP2(f[i].x, f[i].y, fimage, 16777215);
+				}
+
+				if (zo[i].zoOn){
+					if (tOn)iShowBMP2(zo[i].x, zo[i].y, zimage, 16777215);
+				}
+
+
+
+				if (e[i].eOn){
+					iShowBMP2(e[i].x, e[i].y, eimage, 16777215);
+				}
+
+
+				if (v1[i].v1On){
+					iShowBMP2(v1[i].x, v1[i].y, "g\\new\\3.bmp", 16777215);
+				}
+
+			}
+
+			//iShowBMP(0, 0, play);
+			//iShowBMP(0, 0, button[heroIndex]);
+		}
+
+
+
+		else if (gstate == 1)
+		{
+			//pressing instruction button
+			iShowBMP(0, 0, score);
+
+			/*fp = fopen("data1.txt", "r");
+
+			fscanf(fp, "%d", &bs);
+			sprintf(s1, "%d", bs);
+			fclose(fp);
+			iSetColor(255, 255, 255);
+			iText(672, 500, s2, GLUT_BITMAP_TIMES_ROMAN_24);
+			iText(672, 300, s1, GLUT_BITMAP_TIMES_ROMAN_24);*/
+
+		}
+		else if (gstate == 2)
+		{
+			//pressing about button
+			iShowBMP(0, 0, ins);
+			//iSetColor(0, 255, 0);
+			//iText(100, 600, "amlan", GLUT_BITMAP_TIMES_ROMAN_24);
+		}
+
+		else if (gstate == 3)
+		{
+			iShowBMP(0, 0, about);
+
+		}
+
+		else if (gstate == 4)
+		{
+			exit(0);
+		}
+
+	}
+
+
+	/*
+		function iMouseMove() is called when the user presses and drags the mouse.
+		(mx, my) is the position where the mouse pointer is.
+		*/
+	void iMouseMove(int mx, int my)
+	{
+		//place your codes here
+	}
+
+	/*
+		function iMouse() is called when the user presses/releases the mouse.
+		(mx, my) is the position where the mouse pointer is.
+		*/
+	void iMouse(int button, int state, int mx, int my)
+	{
+		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		{
+			//place your codes here
+			for (int i = 0; i < 5; i++)
+			{
+
+				if (mx >= bCoordinate[i].x && mx <= bCoordinate[i].x + 210 && my >= bCoordinate[i].y && my <= bCoordinate[i].y + 50)
+				{
+					gstate = i;
+				}
+			}
+		}
+		if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		{
+			//place your codes here
+		}
+	}
+
+/*iPassiveMouseMove is called to detect and use
+the mouse point without pressing any button */
+
+void iPassiveMouseMove(int mx,int my)
+{
+	//place your code here
+
+ mposx = mx;
+ mposy = my;
+ if(mx== 2){}        /*Something to do with mx*/
+ else if(my== 2){}   /*Something to do with my*/
+
+}
+
+/*
+	function iKeyboard() is called whenever the user hits a key in keyboard.
+	key- holds the ASCII value of the key pressed.
+*/
+void iKeyboard(unsigned char key)
+{
+	if (key == ' ')
+	{
+		gstate = -1;
+	}
+	
+	if (key == 'j')
+	{
+		for (int i = 0; i < 40; i++)
+		{
+			upperbc[i].a -= bcupSpeed;
+			lowerbc[i].a -= bclowSpeed;
+
+			if (upperbc[i].a <= 0)
+			{
+				upperbc[i].a = width;
+			}
+
+			if (lowerbc[i].a <= 0)
+			{
+				lowerbc[i].a = width;
+			}
+
+		}
+	}
+		if (!jump)
+		{
+			iSetTimer(25, indexChange);
+			jump = true;
+			jumpup = true;
+			kick = false;
+			def = false;
+		}
+	
+
+	/*if (key == 'd')
+	{
+		if (!def)
+		{
+			iSetTimer(25, defIndex);
+			jump = false;
+			jumpup = false;
+			def = true;
+			
+		}
+		
+	}*/
+
+	/*if (key == 'd')
+	{
+		heroX += 10;
+		heroIndex++;
+		if (heroIndex >= 10)
+
+			heroIndex = 0;
+			standPos = false;
+	}
+
+	if (key == 'a')
+	{
+		heroX -= 10;
+		heroIndex--;
+		if (heroIndex < 0)
+
+			heroIndex = 9;
+			standPos = false;
+	}*/
+	
+	if (key == 'k')
+	{
+		heroX -= 10;
+		kickindex--;
+		
+		if (kickindex < 0)
+
+			kickindex = 15;
+			standPos = false;
+	}
+	//place your codes for other keys here
+}
+
+/*
+	function iSpecialKeyboard() is called whenver user hits special keys like-
+	function keys, home, end, pg up, pg down, arraows etc. you have to use
+	appropriate constants to detect them. A list is:
+	GLUT_KEY_F1, GLUT_KEY_F2, GLUT_KEY_F3, GLUT_KEY_F4, GLUT_KEY_F5, GLUT_KEY_F6,
+	GLUT_KEY_F7, GLUT_KEY_F8, GLUT_KEY_F9, GLUT_KEY_F10, GLUT_KEY_F11, GLUT_KEY_F12,
+	GLUT_KEY_LEFT, GLUT_KEY_UP, GLUT_KEY_RIGHT, GLUT_KEY_DOWN, GLUT_KEY_PAGE UP,
+	GLUT_KEY_PAGE DOWN, GLUT_KEY_HOME, GLUT_KEY_END, GLUT_KEY_INSERT
+*/
+void iSpecialKeyboard(unsigned char key)
+{
+	if (key == GLUT_KEY_LEFT)
+	{
+		for (int i = 0; i < 20; i++)
+		{
+			upperbc[i].a -= bcupSpeed;
+			lowerbc[i].a -= bclowSpeed;
+
+			if (upperbc[i].a <= 0)
+			{
+				upperbc[i].a = 1470 ;
+			}
+
+			if (lowerbc[i].a <= 0)
+			{
+				lowerbc[i].a = 1470;
+			}
+
+		}
+
+		//	heroX -= 20;
+		heroIndex--;
+		if (heroX < 40){
+			heroX -= 0;
+		}
+		else
+		{		
+			heroX -= 20;
+		}
+		if (heroIndex < 0)
+		
+			heroIndex = 10;
+			standPos = false;
+		
+
+	}
+	if (key == GLUT_KEY_RIGHT)
+	{
+		for (int i = 0; i < 20; i++)
+		{
+			upperbc[i].a -= bcupSpeed;
+			lowerbc[i].a -= bclowSpeed;
+
+			if (upperbc[i].a <= 0)
+			{
+				upperbc[i].a = 1470;
+			}
+
+			if (lowerbc[i].a <= 0)
+			{
+				lowerbc[i].a = 1470;
+			}
+
+		}
+		//heroX += 10;
+		heroIndex++;
+		if (heroX > 1400){
+			heroX += 0;
+		}
+		else{
+			heroX += 10;
+		}
+		if (heroIndex >= 11)
+		{
+			heroIndex = 0;
+			standPos = false;
+		}
+
+		vilX -= 5;
+		vilIndex++;
+		if (vilIndex >= 15)
+		{
+			vilIndex = 0;
+			standPos = false;
+		}
+
+		 
+	}
+	if (key == GLUT_KEY_HOME)
+	{
+		gstate = -1;
+	}
+	//place your codes for other keys here
+}
+//
+
+void indexChange()
+{
+	testJump++;
+	if (testJump > 32)
+		testJump = 0;
+}
+void index1()
+{
+	testkick++;
+	if (testkick > 15)
+		testkick = 0;
+}
+void defIndex()
+{
+	testDef++;
+	if (testDef > 9)
+		testDef = 0;
+}
+void change()
+{
+	heroIndex++;
+	if (heroIndex >= 11)
+	{
+		heroIndex = 0;
+	}
+	if (jump)
+	{
+		if (jumpup)
+		{
+			jumpCoordinate += 10;
+			if (jumpCoordinate >= jumpLimit)
+			{
+				jumpup = false;
+			
+			}
+		}
+
+		else
+		{
+			jumpCoordinate -= 10;
+			if (jumpCoordinate < 0)
+			{
+				jump = false;
+			
+				jumpCoordinate = 0;
+			}
+		}
+		
+	}
+}
+
+void setAll()
+{
+	int s = 0;
+	for (int i = 0; i < 20; i++)
+	{
+		upperbc[i].b = 96;
+		lowerbc[i].b = 0;
+		
+		upperbc[i].a = s;
+		lowerbc[i].a = s;
+		
+		s += 76;
+	}
+}
+
+void move()
+{
+	for (int i = 0; i < 20; i++)
+	{
+		upperbc[i].a -= bcupSpeed;
+		lowerbc[i].a -= bclowSpeed;
+
+		if (upperbc[i].a <= 0)
+		{
+			upperbc[i].a = 1470;
+		}
+
+		if (lowerbc[i].a <= 0)
+		{
+			lowerbc[i].a = 1470;
+		}
+
+	}
+}
+
+void villain()
+{
+	vilIndex++;
+	if (vilIndex >= 15)
+	{
+		vilIndex = 0;
+	}
+}
+void collisionStand(int Charecter){
+	if (((heroX + 155) >= (vilX - 140) && (heroX + 155) <= (vilX)) && Charecter == 0){
+
+		heroX -= 15;
+	}
+	if ((vilX - 140) <= (heroX + 155) && Charecter == 1){
+
+		heroX += 15;
+	}
+
+}
+
+int m;
+
+/*void collision()
+{
+	m =  vilX- heroX;
+	if (m < 50)
+	{
+		vilX = 1000;
+		
+	}
+}*/
+
+void arriveb1(){
+	b1[b1Index].b1On = true;
+	b1[b1Index].x = heroX+237;
+	b1[b1Index].y = 287;
+	b1Index++;
+	if (b1Index>100)b1Index = 0;
+}
+
+void arriveb2(){
+	if (zoIndex == 0){
+		zo[zoIndex].zoOn = true;
+		zo[zoIndex].x = 1520;
+		zo[zoIndex].y = 100;
+		zoIndex++;
+		if (zoIndex > 100)zoIndex = 0;
+	}
+	else{
+		if (zoIndex > 0){
+			zo[zoIndex].zoOn = false;
+		}
+	}
+}
+
+void arriveb3(){
+	if (v1Index == 0){
+		v1[v1Index].v1On = true;
+		v1[v1Index].x = 1520;
+		v1[v1Index].y = 15;
+		v1Index++;
+		if (v1Index > 100)v1Index = 0;
+	}
+	else{
+		if (v1Index > 0){
+			v1[v1Index].v1On = false;
+			
+		}
+	}
+}
+
+void arriveb4(){
+	if (!zo[0].zoOn){
+		f[fIndex].fOn = true;
+		f[fIndex].x = 1200;
+		f[fIndex].y = 287;
+		fIndex++;
+		if (fIndex > 100)fIndex = 0;
+	}
+}
+
+void arriveb5(){
+	if (!villOn){
+		e[eIndex].eOn = false;
+	
+	}
+	else{
+		e[eIndex].eOn = true;
+		e[eIndex].x = 750;
+		e[eIndex].y = 300;
+		eIndex++;
+		if (eIndex > 100)eIndex = 0;
+	}
+}
+
+int length[100];
+int length1[100];
+int length2[100];
+int length3[100];
+int length4[100];
+
+int r = 0;
+int s = 0;
+int t = 0;
+int u = 0;
+int w = 0;
+void speedObstacle(){
+	if (running){
+		for (int i = 0; i < 100; i++){
+
+			if (b1[i].b1On){
+				b1[i].x += 15;
+				if (villOn)length[i] = vilX - b1[i].x;
+
+
+
+				if (length[i] < 0)
+				{
+					b1[i].b1On = false;
+					//if (r == 0)iShowBMP(0, 0, "g\\white\\3.bmp");
+					r++;
+					if (r > 3){
+						villOn = false;
+
+
+					}
+
+				}
+
+
+			}
+
+			if (e[i].eOn){
+				e[i].x -= 15;
+				if (villOn)length4[i] = e[i].x - heroX;
+
+
+
+				if (length4[i] < 0)
+				{
+					e[i].eOn = false;
+					//if (r == 0)iShowBMP(0, 0, "g\\white\\3.bmp");
+					w++;
+					/*if (w == 1){
+						life2 = true;
+						life1 = false;
+						}
+						if (w == 2){
+						life3 = true;
+						life2 = false;
+						}
+						if (w == 3){
+						life4 = true;
+						life3 = false;
+						}
+						if (w == 4){
+						life5 = true;
+						life4 = false;
+						}
+						if (w == 5){
+						life6 = true;
+						life5 = false;
+						}
+						if (w == 6){
+						life7 = true;
+						life6 = false;
+						}
+
+						if (w > 6){
+						heroOn = false;
+						gstate = -1;
+
+
+
+						}*/
+
+				}
+
+
+			}
+
+			if (b1[i].x <= 0)b1[i].b1On = false;
+
+			if (f[i].fOn){
+				f[i].x -= 15;
+				if (heroOn){ length3[i] = f[i].x - (heroX + 100); }
+
+				if (length3[i] < 0)
+				{
+					f[i].fOn = false;
+					u++;
+					if (u == 1){
+						life2 = true;
+						life1 = false;
+					}
+					if (u == 2){
+						life3 = true;
+						life2 = false;
+					}
+					if (u == 3){
+						life4 = true;
+						life3 = false;
+					}
+					if (u == 4){
+						life5 = true;
+						life4 = false;
+					}
+					if (u == 5){
+						life6 = true;
+						life5 = false;
+					}
+					if (u == 6){
+						life7 = true;
+						life6 = false;
+					}
+
+					if (u == 7){
+						iShowBMP(0, 0, z);
+						life7 = false;
+
+					}
+					if (u >= 7){
+						heroOn = false;
+						//iShowBMP(0, 0, game);
+						exit(0);
+					}
+				}
+			}
+
+			if (f[i].x <= 0)f[i].fOn = false;
+
+			if (!zo[0].zoOn){
+
+
+				if (v1[i].v1On){
+
+					if (v1[i].x < 1300){
+						v1[i].x += 0;
+					}
+					else{
+						v1[i].x -= 20;
+					}
+					if (xOn){
+						length2[0] = v1[0].x - b1[i].x;
+					}
+
+					if (length2[0] < 0)
+					{
+						v1[i].v1On = false;
+						t++;
+						if (t > 2){
+							xOn = false;
+						}
+					}
+
+					if (v1[i].x <= 0)v1[i].v1On = false;
+				}
+			}
+
+			if (villOn == false){
+				if (zo[i].zoOn){
+					zo[i].x -= 15;
+
+
+					length1[i] = zo[i].x - b1[i].x;
+
+
+
+
+					if (length1[i] < 0)
+					{
+						zo[i].zoOn = false;
+						s++;
+						if (s > 3){
+							tOn = false;
+						}
+
+					}
+
+					if (zo[i].x <= 0)zo[i].zoOn = false;
+
+				}
+			}
+
+		}
+	}
+	if (u == 7){
+		running = false;
+		iShowBMP(0, 0, game);
+	}
+}
+
+
+/*void hscore()
+{
+	if (gstate == 0)
+
+
+
+	{
+		scoree++;
+
+	}
+	sc = scoree;
+
+	sprintf(sa, "SCORE: %d", sc);
+	sprintf(s2, "%d", sc);
+
+	if (bestscore < sc)
+	{
+		bestscore = sc;
+	}
+
+}*/
+
+int main()
+{
+	//place your own initialization codes here.
+	
+	setAll();
+
+	int sum = 170;
+	for (int i = 4; i >= 0; i--)
+	{
+		bCoordinate[i].x = 1150;
+		bCoordinate[i].y = sum;
+		sum += 100;
+	}
+	iSetTimer(25, change);
+	iSetTimer(25, villain);
+	iSetTimer(25, index1);
+	//iSetTimer(25, collision);
+
+	iSetTimer(3000, arriveb1);
+	iSetTimer(6000, arriveb2);
+	iSetTimer(10000, arriveb3);
+	iSetTimer(3000, arriveb4);
+	iSetTimer(3000, arriveb5);
+	
+
+	iSetTimer(25, speedObstacle);
+	
+	if (musicon){
+		PlaySound("music\\1.wav", NULL, SND_LOOP | SND_ASYNC);
+	}
+
+	//iSetTimer(1000, hscore);
+
+	iInitialize(width, height, "Battle");
+
+
+	return 0;
+}

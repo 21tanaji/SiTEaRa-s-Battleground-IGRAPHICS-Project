@@ -1,0 +1,9 @@
+if(musicOn);
+	PlaySound("music\\Play.wav",NULL,SND_LOOP | SND_ASYNC);
+
+
+
+
+iClear();
+
+	iShowBMP(pic_x, pic_y,"Free Fire War.bmp");

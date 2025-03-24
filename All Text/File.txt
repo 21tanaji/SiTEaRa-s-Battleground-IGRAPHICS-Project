@@ -1,0 +1,865 @@
+# include "iGraphics.h"
+#define width 1520
+#define height 790
+#define jumpLimit 100
+#define bcupSpeed 10
+#define bclowSpeed 10
+
+
+
+
+
+
+
+void iDraw()
+{
+	//place your drawing codes here
+	iClear();
+
+	/*FILE *fp = fopen("data1.txt", "r");
+
+	fscanf(fp, "%d", &bestscore);
+	sprintf(s1, "%d", bestscore);
+
+	fclose(fp);*/
+
+	if (gstate == -2)
+	{
+		iShowBMP(0, 0, name);
+	}
+
+
+	else if (gstate == -1)
+	{
+		//home
+		iShowBMP(0, 0, home);
+
+		for (int i = 0; i < 5; i++)
+		{
+			iShowBMP2(bCoordinate[i].x, bCoordinate[i].y, button[i], 0);
+		}
+
+	}
+	else if (gstate == 0)
+	{
+		//pressing play button
+
+
+		//iSetColor(0, 255, 0);
+		//iText(50, 450, sa, GLUT_BITMAP_TIMES_ROMAN_24);
+
+		/*if (scoree > bestscore){
+
+			fp = fopen("data1.txt", "w");
+
+			fprintf(fp, "%d", scoree);
+			fclose(fp);*/
+
+
+
+			if (kicky)
+			{
+				if (kick)
+				{
+					iShowBMP2(heroX, heroY, herokick[testkick], 16777215);
+				}
+				else
+				{
+					iShowBMP2(heroX, heroY, herokick[0], 16777215);
+				}
+			}
+			else if (jump)
+			{
+				if (jumpup)
+				{
+					if (heroOn)iShowBMP2(heroX, heroY + jumpCoordinate, heroJump[testJump], 0);
+					if (villOn)iShowBMP2(vilX, vilY, vilforward[vilIndex], 0);
+				}
+				else
+					if (heroOn)iShowBMP2(heroX, heroY + jumpCoordinate, heroJump[0], 0);
+				if (villOn)iShowBMP2(vilX, vilY, vilforward[vilIndex], 0);
+
+			}
+
+			else if (def)
+			{
+				iShowBMP2(heroX + defCordinate, heroY, defence[testDef], 16777215);
+			}
+
+
+			else
+			{
+				if (!standPos)
+				{
+
+					if (heroOn)iShowBMP2(heroX, heroY, heroForward[heroIndex], 0);
+					//iShowBMP2(heroX, heroY, herokick[kickindex], 16777215);
+					if (villOn)iShowBMP2(vilX, vilY, vilforward[vilIndex], 0);
+
+
+
+
+
+					standCounter++;
+
+					if (standCounter >= 20)
+					{
+						standCounter = 0;
+						heroIndex = 0;
+						kickindex = 0;
+						vilIndex = 0;
+						standPos = true;
+						b1[b1Index].b1On = false;
+					}
+				}
+
+				else
+				{
+					if (heroOn)iShowBMP2(heroX, heroY, "g\\tanm.bmp", 0);
+					if (villOn){ iShowBMP2(vilX, vilY, at, 0); }
+					//iShowBMP2(vil1x, vil1y, "g\\new\\3.bmp", 16777215);
+				}
+			}
+
+			for (int i = 0; i < 100; i++)
+			{
+
+				if (b1[i].b1On)
+				{
+					iShowBMP2(b1[i].x, b1[i].y, bimage, 16777215);
+
+				}
+
+				if (f[i].fOn)
+				{
+					iShowBMP2(f[i].x, f[i].y, fimage, 16777215);
+				}
+
+				if (zo[i].zoOn){
+					if (tOn)iShowBMP2(zo[i].x, zo[i].y, zimage, 16777215);
+				}
+
+
+
+				if (e[i].eOn){
+					iShowBMP2(e[i].x, e[i].y, eimage, 16777215);
+				}
+
+
+				if (v1[i].v1On){
+					iShowBMP2(v1[i].x, v1[i].y, "g\\new\\3.bmp", 16777215);
+				}
+
+			}
+
+			//iShowBMP(0, 0, play);
+			//iShowBMP(0, 0, button[heroIndex]);
+		}
+
+
+
+		else if (gstate == 1)
+		{
+			//pressing instruction button
+			iShowBMP(0, 0, score);
+
+			/*fp = fopen("data1.txt", "r");
+
+			fscanf(fp, "%d", &bs);
+			sprintf(s1, "%d", bs);
+			fclose(fp);
+			iSetColor(255, 255, 255);
+			iText(672, 500, s2, GLUT_BITMAP_TIMES_ROMAN_24);
+			iText(672, 300, s1, GLUT_BITMAP_TIMES_ROMAN_24);*/
+
+		}
+		else if (gstate == 2)
+		{
+			//pressing about button
+			iShowBMP(0, 0, ins);
+			//iSetColor(0, 255, 0);
+			//iText(100, 600, "amlan", GLUT_BITMAP_TIMES_ROMAN_24);
+		}
+
+		else if (gstate == 3)
+		{
+			iShowBMP(0, 0, about);
+
+		}
+
+		else if (gstate == 4)
+		{
+			exit(0);
+		}
+
+	}
+
+
+	/*
+		function iMouseMove() is called when the user presses and drags the mouse.
+		(mx, my) is the position where the mouse pointer is.
+		*/
+	void iMouseMove(int mx, int my)
+	{
+		//place your codes here
+	}
+
+	/*
+		function iMouse() is called when the user presses/releases the mouse.
+		(mx, my) is the position where the mouse pointer is.
+		*/
+	void iMouse(int button, int state, int mx, int my)
+	{
+		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		{
+			//place your codes here
+			for (int i = 0; i < 5; i++)
+			{
+
+				if (mx >= bCoordinate[i].x && mx <= bCoordinate[i].x + 210 && my >= bCoordinate[i].y && my <= bCoordinate[i].y + 50)
+				{
+					gstate = i;
+				}
+			}
+		}
+		if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		{
+			//place your codes here
+		}
+	}
+
+/*iPassiveMouseMove is called to detect and use
+the mouse point without pressing any button */
+
+void iPassiveMouseMove(int mx,int my)
+{
+	//place your code here
+
+ mposx = mx;
+ mposy = my;
+ if(mx== 2){}        /*Something to do with mx*/
+ else if(my== 2){}   /*Something to do with my*/
+
+}
+
+/*
+	function iKeyboard() is called whenever the user hits a key in keyboard.
+	key- holds the ASCII value of the key pressed.
+*/
+void iKeyboard(unsigned char key)
+{
+	if (key == ' ')
+	{
+		gstate = -1;
+	}
+	
+	if (key == 'j')
+	{
+		for (int i = 0; i < 40; i++)
+		{
+			upperbc[i].a -= bcupSpeed;
+			lowerbc[i].a -= bclowSpeed;
+
+			if (upperbc[i].a <= 0)
+			{
+				upperbc[i].a = width;
+			}
+
+			if (lowerbc[i].a <= 0)
+			{
+				lowerbc[i].a = width;
+			}
+
+		}
+	}
+		if (!jump)
+		{
+			iSetTimer(25, indexChange);
+			jump = true;
+			jumpup = true;
+			kick = false;
+			def = false;
+		}
+	
+
+	/*if (key == 'd')
+	{
+		if (!def)
+		{
+			iSetTimer(25, defIndex);
+			jump = false;
+			jumpup = false;
+			def = true;
+			
+		}
+		
+	}*/
+
+	/*if (key == 'd')
+	{
+		heroX += 10;
+		heroIndex++;
+		if (heroIndex >= 10)
+
+			heroIndex = 0;
+			standPos = false;
+	}
+
+	if (key == 'a')
+	{
+		heroX -= 10;
+		heroIndex--;
+		if (heroIndex < 0)
+
+			heroIndex = 9;
+			standPos = false;
+	}*/
+	
+	if (key == 'k')
+	{
+		heroX -= 10;
+		kickindex--;
+		
+		if (kickindex < 0)
+
+			kickindex = 15;
+			standPos = false;
+	}
+	//place your codes for other keys here
+}
+
+/*
+	function iSpecialKeyboard() is called whenver user hits special keys like-
+	function keys, home, end, pg up, pg down, arraows etc. you have to use
+	appropriate constants to detect them. A list is:
+	GLUT_KEY_F1, GLUT_KEY_F2, GLUT_KEY_F3, GLUT_KEY_F4, GLUT_KEY_F5, GLUT_KEY_F6,
+	GLUT_KEY_F7, GLUT_KEY_F8, GLUT_KEY_F9, GLUT_KEY_F10, GLUT_KEY_F11, GLUT_KEY_F12,
+	GLUT_KEY_LEFT, GLUT_KEY_UP, GLUT_KEY_RIGHT, GLUT_KEY_DOWN, GLUT_KEY_PAGE UP,
+	GLUT_KEY_PAGE DOWN, GLUT_KEY_HOME, GLUT_KEY_END, GLUT_KEY_INSERT
+*/
+void iSpecialKeyboard(unsigned char key)
+{
+	if (key == GLUT_KEY_LEFT)
+	{
+		for (int i = 0; i < 20; i++)
+		{
+			upperbc[i].a -= bcupSpeed;
+			lowerbc[i].a -= bclowSpeed;
+
+			if (upperbc[i].a <= 0)
+			{
+				upperbc[i].a = 1470 ;
+			}
+
+			if (lowerbc[i].a <= 0)
+			{
+				lowerbc[i].a = 1470;
+			}
+
+		}
+
+		//	heroX -= 20;
+		heroIndex--;
+		if (heroX < 40){
+			heroX -= 0;
+		}
+		else
+		{		
+			heroX -= 20;
+		}
+		if (heroIndex < 0)
+		
+			heroIndex = 10;
+			standPos = false;
+		
+
+	}
+	if (key == GLUT_KEY_RIGHT)
+	{
+		for (int i = 0; i < 20; i++)
+		{
+			upperbc[i].a -= bcupSpeed;
+			lowerbc[i].a -= bclowSpeed;
+
+			if (upperbc[i].a <= 0)
+			{
+				upperbc[i].a = 1470;
+			}
+
+			if (lowerbc[i].a <= 0)
+			{
+				lowerbc[i].a = 1470;
+			}
+
+		}
+		//heroX += 10;
+		heroIndex++;
+		if (heroX > 1400){
+			heroX += 0;
+		}
+		else{
+			heroX += 10;
+		}
+		if (heroIndex >= 11)
+		{
+			heroIndex = 0;
+			standPos = false;
+		}
+
+		vilX -= 5;
+		vilIndex++;
+		if (vilIndex >= 15)
+		{
+			vilIndex = 0;
+			standPos = false;
+		}
+
+		 
+	}
+	if (key == GLUT_KEY_HOME)
+	{
+		gstate = -1;
+	}
+	//place your codes for other keys here
+}
+//
+
+void indexChange()
+{
+	testJump++;
+	if (testJump > 32)
+		testJump = 0;
+}
+void index1()
+{
+	testkick++;
+	if (testkick > 15)
+		testkick = 0;
+}
+void defIndex()
+{
+	testDef++;
+	if (testDef > 9)
+		testDef = 0;
+}
+void change()
+{
+	heroIndex++;
+	if (heroIndex >= 11)
+	{
+		heroIndex = 0;
+	}
+	if (jump)
+	{
+		if (jumpup)
+		{
+			jumpCoordinate += 10;
+			if (jumpCoordinate >= jumpLimit)
+			{
+				jumpup = false;
+			
+			}
+		}
+
+		else
+		{
+			jumpCoordinate -= 10;
+			if (jumpCoordinate < 0)
+			{
+				jump = false;
+			
+				jumpCoordinate = 0;
+			}
+		}
+		
+	}
+}
+
+void setAll()
+{
+	int s = 0;
+	for (int i = 0; i < 20; i++)
+	{
+		upperbc[i].b = 96;
+		lowerbc[i].b = 0;
+		
+		upperbc[i].a = s;
+		lowerbc[i].a = s;
+		
+		s += 76;
+	}
+}
+
+void move()
+{
+	for (int i = 0; i < 20; i++)
+	{
+		upperbc[i].a -= bcupSpeed;
+		lowerbc[i].a -= bclowSpeed;
+
+		if (upperbc[i].a <= 0)
+		{
+			upperbc[i].a = 1470;
+		}
+
+		if (lowerbc[i].a <= 0)
+		{
+			lowerbc[i].a = 1470;
+		}
+
+	}
+}
+
+void villain()
+{
+	vilIndex++;
+	if (vilIndex >= 15)
+	{
+		vilIndex = 0;
+	}
+}
+void collisionStand(int Charecter){
+	if (((heroX + 155) >= (vilX - 140) && (heroX + 155) <= (vilX)) && Charecter == 0){
+
+		heroX -= 15;
+	}
+	if ((vilX - 140) <= (heroX + 155) && Charecter == 1){
+
+		heroX += 15;
+	}
+
+}
+
+int m;
+
+/*void collision()
+{
+	m =  vilX- heroX;
+	if (m < 50)
+	{
+		vilX = 1000;
+		
+	}
+}*/
+
+void arriveb1(){
+	b1[b1Index].b1On = true;
+	b1[b1Index].x = heroX+237;
+	b1[b1Index].y = 287;
+	b1Index++;
+	if (b1Index>100)b1Index = 0;
+}
+
+void arriveb2(){
+	if (zoIndex == 0){
+		zo[zoIndex].zoOn = true;
+		zo[zoIndex].x = 1520;
+		zo[zoIndex].y = 100;
+		zoIndex++;
+		if (zoIndex > 100)zoIndex = 0;
+	}
+	else{
+		if (zoIndex > 0){
+			zo[zoIndex].zoOn = false;
+		}
+	}
+}
+
+void arriveb3(){
+	if (v1Index == 0){
+		v1[v1Index].v1On = true;
+		v1[v1Index].x = 1520;
+		v1[v1Index].y = 15;
+		v1Index++;
+		if (v1Index > 100)v1Index = 0;
+	}
+	else{
+		if (v1Index > 0){
+			v1[v1Index].v1On = false;
+			
+		}
+	}
+}
+
+void arriveb4(){
+	if (!zo[0].zoOn){
+		f[fIndex].fOn = true;
+		f[fIndex].x = 1200;
+		f[fIndex].y = 287;
+		fIndex++;
+		if (fIndex > 100)fIndex = 0;
+	}
+}
+
+void arriveb5(){
+	if (!villOn){
+		e[eIndex].eOn = false;
+	
+	}
+	else{
+		e[eIndex].eOn = true;
+		e[eIndex].x = 750;
+		e[eIndex].y = 300;
+		eIndex++;
+		if (eIndex > 100)eIndex = 0;
+	}
+}
+
+int length[100];
+int length1[100];
+int length2[100];
+int length3[100];
+int length4[100];
+
+int r = 0;
+int s = 0;
+int t = 0;
+int u = 0;
+int w = 0;
+void speedObstacle(){
+	if (running){
+		for (int i = 0; i < 100; i++){
+
+			if (b1[i].b1On){
+				b1[i].x += 15;
+				if (villOn)length[i] = vilX - b1[i].x;
+
+
+
+				if (length[i] < 0)
+				{
+					b1[i].b1On = false;
+					//if (r == 0)iShowBMP(0, 0, "g\\white\\3.bmp");
+					r++;
+					if (r > 3){
+						villOn = false;
+
+
+					}
+
+				}
+
+
+			}
+
+			if (e[i].eOn){
+				e[i].x -= 15;
+				if (villOn)length4[i] = e[i].x - heroX;
+
+
+
+				if (length4[i] < 0)
+				{
+					e[i].eOn = false;
+					//if (r == 0)iShowBMP(0, 0, "g\\white\\3.bmp");
+					w++;
+					/*if (w == 1){
+						life2 = true;
+						life1 = false;
+						}
+						if (w == 2){
+						life3 = true;
+						life2 = false;
+						}
+						if (w == 3){
+						life4 = true;
+						life3 = false;
+						}
+						if (w == 4){
+						life5 = true;
+						life4 = false;
+						}
+						if (w == 5){
+						life6 = true;
+						life5 = false;
+						}
+						if (w == 6){
+						life7 = true;
+						life6 = false;
+						}
+
+						if (w > 6){
+						heroOn = false;
+						gstate = -1;
+
+
+
+						}*/
+
+				}
+
+
+			}
+
+			if (b1[i].x <= 0)b1[i].b1On = false;
+
+			if (f[i].fOn){
+				f[i].x -= 15;
+				if (heroOn){ length3[i] = f[i].x - (heroX + 100); }
+
+				if (length3[i] < 0)
+				{
+					f[i].fOn = false;
+					u++;
+					if (u == 1){
+						life2 = true;
+						life1 = false;
+					}
+					if (u == 2){
+						life3 = true;
+						life2 = false;
+					}
+					if (u == 3){
+						life4 = true;
+						life3 = false;
+					}
+					if (u == 4){
+						life5 = true;
+						life4 = false;
+					}
+					if (u == 5){
+						life6 = true;
+						life5 = false;
+					}
+					if (u == 6){
+						life7 = true;
+						life6 = false;
+					}
+
+					if (u == 7){
+						iShowBMP(0, 0, z);
+						life7 = false;
+
+					}
+					if (u >= 7){
+						heroOn = false;
+						//iShowBMP(0, 0, game);
+						exit(0);
+					}
+				}
+			}
+
+			if (f[i].x <= 0)f[i].fOn = false;
+
+			if (!zo[0].zoOn){
+
+
+				if (v1[i].v1On){
+
+					if (v1[i].x < 1300){
+						v1[i].x += 0;
+					}
+					else{
+						v1[i].x -= 20;
+					}
+					if (xOn){
+						length2[0] = v1[0].x - b1[i].x;
+					}
+
+					if (length2[0] < 0)
+					{
+						v1[i].v1On = false;
+						t++;
+						if (t > 2){
+							xOn = false;
+						}
+					}
+
+					if (v1[i].x <= 0)v1[i].v1On = false;
+				}
+			}
+
+			if (villOn == false){
+				if (zo[i].zoOn){
+					zo[i].x -= 15;
+
+
+					length1[i] = zo[i].x - b1[i].x;
+
+
+
+
+					if (length1[i] < 0)
+					{
+						zo[i].zoOn = false;
+						s++;
+						if (s > 3){
+							tOn = false;
+						}
+
+					}
+
+					if (zo[i].x <= 0)zo[i].zoOn = false;
+
+				}
+			}
+
+		}
+	}
+	if (u == 7){
+		running = false;
+		iShowBMP(0, 0, game);
+	}
+}
+
+
+/*void hscore()
+{
+	if (gstate == 0)
+
+
+
+	{
+		scoree++;
+
+	}
+	sc = scoree;
+
+	sprintf(sa, "SCORE: %d", sc);
+	sprintf(s2, "%d", sc);
+
+	if (bestscore < sc)
+	{
+		bestscore = sc;
+	}
+
+}*/
+
+int main()
+{
+	//place your own initialization codes here.
+	
+	setAll();
+
+	int sum = 170;
+	for (int i = 4; i >= 0; i--)
+	{
+		bCoordinate[i].x = 1150;
+		bCoordinate[i].y = sum;
+		sum += 100;
+	}
+	iSetTimer(25, change);
+	iSetTimer(25, villain);
+	iSetTimer(25, index1);
+	//iSetTimer(25, collision);
+
+	iSetTimer(3000, arriveb1);
+	iSetTimer(6000, arriveb2);
+	iSetTimer(10000, arriveb3);
+	iSetTimer(3000, arriveb4);
+	iSetTimer(3000, arriveb5);
+	
+
+	iSetTimer(25, speedObstacle);
+	
+	if (musicon){
+		PlaySound("music\\1.wav", NULL, SND_LOOP | SND_ASYNC);
+	}
+
+	//iSetTimer(1000, hscore);
+
+	iInitialize(width, height, "Battle");
+
+
+	return 0;
+}

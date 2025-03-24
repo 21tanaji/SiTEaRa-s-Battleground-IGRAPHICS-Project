@@ -1,0 +1,1011 @@
+#include "iGraphics.h"
+#include "bitmap_loader.h"
+#include<stdio.h>
+#include<iostream>
+#define SIZE 5
+
+
+void gamePlayView();
+void AllGuli();
+void Gameplay();
+void health();
+
+bool jan = false;
+bool feb = true;
+bool mar = false;
+bool apr = false;
+bool may = false;
+
+bool a1 = true;
+bool a2 = true;
+bool a3 = true;
+bool a4 = true;
+bool a5 = true;
+
+
+bool b1 = false;
+bool b2 = false;
+bool b3 = false;
+bool b4 = false;
+bool b5 = false;
+
+int green = 0;
+bool dLife[10] = {true,true,true,true,true,true,true,true,true,true};
+
+
+
+//Variable section :
+//Menu
+int mposx, mposy;
+
+int gameState =-1;
+
+//Hero
+char Hero[9][15]={"Hero\\Hero1.bmp","Hero\\Hero2.bmp","Hero\\Hero3.bmp","Hero\\Hero4.bmp","Hero\\Hero5.bmp","Hero\\Hero6.bmp","Hero\\Hero7.bmp","Hero\\Hero8.bmp","Hero\\Hero9.bmp"};
+
+int HeroIndex=0;
+
+//Monster1
+char Monster1[8][25]={"Monster1\\M1.bmp","Monster1\\M2.bmp","Monster1\\M3.bmp","Monster1\\M4.bmp","Monster1\\M5.bmp","Monster1\\M6.bmp"};
+int MonsterIndex=0;
+
+//Monster2
+char Monster2[8][25]={"Monster1\\M11.bmp","Monster1\\M12.bmp","Monster1\\M13.bmp","Monster1\\M14.bmp","Monster1\\M15.bmp","Monster1\\M16.bmp"};
+//int MonsterIndex=0;
+
+//Monster3
+char Monster3[8][25]={"Monster1\\M21.bmp","Monster1\\M22.bmp","Monster1\\M23.bmp","Monster1\\M24.bmp","Monster1\\M25.bmp"};
+//int MonsterIndex=0;
+
+//Monster4
+char Monster4[8][25]={"Monster1\\Monster01.bmp","Monster1\\Monster02.bmp","Monster1\\Monster03.bmp","Monster1\\Monster04.bmp","Monster1\\Monster05.bmp"};
+//int MonsterIndex=0;
+
+//Monster5
+char Monster5[8][25]={"Monster1\\Mn1.bmp","Monster1\\Mn2.bmp","Monster1\\Mn3.bmp","Monster1\\Mn4.bmp","Monster1\\Mn5.bmp","Monster1\\Mn6.bmp","Monster1\\Mn7.bmp"};
+//int MonsterIndex=0;
+
+//Monster6
+char Monster6[8][25]={"Monster1\\Monster1.bmp","Monster1\\Monster2.bmp","Monster1\\Monster3.bmp","Monster1\\Monster4.bmp"};
+//int MonsterIndex=0;
+
+//Monster7
+char Monster7[8][25]={"Monster1\\MiniBoss1.bmp","Monster1\\MiniBoss2.bmp","Monster1\\MiniBoss3.bmp","Monster1\\MiniBoss4.bmp","Monster1\\MiniBoss5.bmp","Monster1\\MiniBoss6.bmp","Monster1\\MiniBoss7.bmp","Monster1\\MiniBoss8.bmp"};
+//int MonsterIndex=0;
+
+//Monster8
+char Monster8[15][25]={"Monster1\\Boss1.bmp","Monster1\\Boss2.bmp","Monster1\\Boss3.bmp","Monster1\\Boss4.bmp","Monster1\\Boss5.bmp","Monster1\\Boss6.bmp","Monster1\\Boss7.bmp","Monster1\\Boss8.bmp","Monster1\\Boss9.bmp","Monster1\\Boss10.bmp","Monster1\\Boss11.bmp","Monster1\\Boss12.bmp","Monster1\\Boss13.bmp","Monster1\\Boss14.bmp","Monster1\\Boss15.bmp"};
+//int MonsterIndex=0;
+
+
+//Background
+
+double monsterLifeMain = 400;
+double monsterLifeChange = 100;		// to be displayed
+
+
+double heroLifeMain =200;
+
+
+
+
+bool YouNoob = true;
+bool YouWin = true;
+
+
+
+
+int pause1,pause2,pause3,pause4,pause5,pause6,pause7,pause8,pause9,pause10,pause11,pause12,pause13,pause14,pause15,pause16;					 //for resume and pause purpose
+
+double hero_x=20;							//hero x co ordinate
+double hero_y=400;							//hero y co ordinate
+
+double monster_x = 850;						//monster x co ordinate
+double monster_y = 300;						//monster y co ordinate
+
+int dx=10;									// for ghas;
+int dy=50;									//for hero guli		
+int dyy=5;									//for hero boro hero guli
+int ox =5;									//for monster
+int oy =5;									//for monster
+int mdy =50;								// for monster guli
+int mdyy = 5;								// for monster boro guli
+
+
+double monsterCopy_x=monster_x;				//to store the value between guli and monster
+double monsterCopy_y=monster_y;				//to store the value between guli and monster	
+
+
+double heroCopy_x=hero_x;					//to store the value between guli and hero
+double heroCopy_y=hero_y;					//to store the valuebetween guli and hero
+
+
+											//Bullet of hero
+
+int HeroBullet_x[] ={heroCopy_x,heroCopy_x,heroCopy_x,heroCopy_x,heroCopy_x,heroCopy_x};
+int HeroBullet_y[] ={heroCopy_y,heroCopy_y,heroCopy_y,heroCopy_y,heroCopy_y,heroCopy_y};
+
+											//Bullet of Monster
+
+int MonsterBullet_x[]= {monsterCopy_x,monsterCopy_x,monsterCopy_x,monsterCopy_x,monsterCopy_x,monsterCopy_x};
+int MonsterBullet_y[]= {monsterCopy_y,monsterCopy_y,monsterCopy_y,monsterCopy_y,monsterCopy_y,monsterCopy_y};
+
+
+int ghas_x[] = {0,0,0};
+
+
+
+bool musicOn=true;
+bool MusicOn=false;
+
+//file
+int scoree=0,bestScore,bs,sc;
+char S[10],S1[10],S2[10];
+
+
+/*void save(){
+	FILE * fp1=fopen("save.txt","w");
+	fprintf(fp1,"%d %d %d",heroLifeMain,monsterLifeMain,scoree);
+	fclose(fp1);
+}
+
+void load(){
+	FILE * fp2=fopen("save.txt","r");
+	if(fp2==NULL)
+	{
+		heroLifeMain=200,monsterLifeMain=200,scoree=0;
+	}
+	else{
+		fscanf(fp2,"%d %d %d",&heroLifeMain,&monsterLifeMain,&scoree);
+	}
+	fclose(fp2);
+}*/
+
+void Gameplay()
+{
+	
+	iSetColor(255,0,0);
+		  iShowBMP2(hero_x,hero_y,Hero[HeroIndex],255); 
+
+		 // iShowBMP2(monster_x, monster_y,Monster[MonsterIndex],255);
+		  if(feb)
+		  {iShowBMP2(monster_x, monster_y,Monster1[MonsterIndex],255); }
+			//iFilledRectangle(monster_x, monster_y,100,100);
+		if(mar) 
+		{iShowBMP2(monster_x, monster_y,Monster2[MonsterIndex],255); } 
+		//iFilledRectangle(monster_x, monster_y,50,50);
+		if(apr) 
+		{iShowBMP2(monster_x, monster_y,Monster3[MonsterIndex],255); } 
+		//iFilledRectangle(monster_x, monster_y,150,150);
+		if(may) 
+		{iShowBMP2(monster_x, monster_y,Monster4[MonsterIndex],255); } 
+		//iFilledRectangle(monster_x, monster_y,200,200);
+
+		
+	
+}
+
+
+
+void gamePlayView(){
+
+	iShowBMP(0,0,"Green.bmp");
+	//vumi
+	iSetColor(34,23,4);
+	iFilledRectangle(0,0,1000,25);
+	iSetColor(156,113,38);
+	iFilledRectangle(0,25,1000,25);
+	iSetColor(218,150,33);
+	iFilledRectangle(0,50,1000,25);
+	// loha
+	iSetColor(48,11,15);
+	for(int i =100; i <400 ; i+=100)
+	iFilledRectangle(1000+i-ghas_x[0],75,20,40);
+
+	iSetColor(92,78,80);
+	for(int i= 300;i<700;i+=100)
+	iFilledRectangle(1000+i-ghas_x[0],75,10,60);
+	
+	iSetColor(48,11,15);
+	for(int i = 700;i<1200;i+=100)
+	iFilledRectangle(1000+760-ghas_x[1],75,32,55);
+	
+	iSetColor(92,78,80);
+	iFilledRectangle(1000+1160-ghas_x[2],75,10,40);
+
+	iSetColor(0,255,0);
+	iFilledRectangle(100,700,200,25);
+	iSetColor(255,0,0);
+	iFilledRectangle(600,700,200,25);
+
+
+	iSetColor(255,255,255);
+	if (dLife[green]){
+		iFilledRectangle(600 ,700 , 0+green,25);
+	}
+	//iShowBMP2(500,300,"Thunder1.bmp",255);
+	
+}
+
+
+
+void AllGuli(){
+	
+	// Hero guli
+
+iSetColor(255,0,0);
+	for(int i =0 ;i<6;i++)
+	iFilledRectangle(HeroBullet_x[i]+10,HeroBullet_y[i]+50,10,10);
+	iFilledCircle(HeroBullet_x[5]+30,HeroBullet_y[5]+50,22,1000);
+	iSetColor(250,243,25);
+	iFilledCircle(HeroBullet_x[5]+30,HeroBullet_y[5]+50,12,1000);
+
+	// monster guli
+	 iSetColor(0,0,0);
+	 for(int i =0; i<6; i++)
+	iFilledRectangle(MonsterBullet_x[i]+10,MonsterBullet_y[i]+50,10,10);
+	 iFilledCircle(MonsterBullet_x[5]+30,MonsterBullet_y[5]+50,22,1000);
+	 iSetColor(80,12,239);
+	 iFilledCircle(MonsterBullet_x[5]+30,MonsterBullet_y[5]+50,12,1000);
+
+	
+	
+}
+
+
+void AllDrawing(){
+	FILE *fp = fopen("data1.txt", "r");
+		
+		fscanf(fp, "%d", &bestScore);		
+		sprintf(S1, "%d", bestScore);
+		
+		fclose(fp);
+
+	 if(gameState ==-1)
+	{
+		//Homemenu
+		iShowBMP(0, 0, "man\\home.bmp");
+		iShowBMP2(500,100,"MainMenu2.bmp",255);
+		iShowBMP2(700,100,"MainMenu1.bmp",255);
+		
+		if(a1)iShowBMP(100,500,"man\\A.bmp");
+		if(a2)iShowBMP(100,400,"man\\B.bmp");
+		if(a3)iShowBMP(100,300,"man\\C.bmp");
+		if(a4)iShowBMP(100,200,"man\\E.bmp");
+		if(a5)iShowBMP(100,100,"man\\F.bmp");
+
+		if(b1)iShowBMP(100,500,"man\\A1.bmp");
+		if(b2)iShowBMP(100,400,"man\\B1.bmp");
+		if(b3)iShowBMP(100,300,"man\\C1.bmp");
+		if(b4)iShowBMP(100,200,"man\\E1.bmp");
+		if(b5)iShowBMP(100,100,"man\\F1.bmp");
+	
+	}
+	  else if(gameState == 0)
+	
+	{
+		if(YouWin && YouNoob){
+		gamePlayView();
+		AllGuli();
+		Gameplay();
+		}
+		else if(YouWin ){
+			iShowBMP(10,10,"One.bmp");
+		}
+		else if(YouNoob){
+			iShowBMP(10,10,"Two.bmp");
+		}
+			
+		/*iShowBMP(0,0,whiteImage);
+			iShowBMP2(0,0,sounds[soundIndex],16777215);
+			if(heart1){iShowBMP2(0,0,hart[0],16777215);}
+			if(heart2)iShowBMP2(0,100,hart[1],16777215);
+			if(heart3)iShowBMP2(0,200,hart[2],16777215);
+
+
+			iSetColor(0,255,0);
+		iText(50,450,S, GLUT_BITMAP_TIMES_ROMAN_24);*/
+
+		if(scoree > bestScore){
+		
+			fp = fopen("data1.txt", "w");
+		
+			fprintf(fp,"%d", scoree);
+			fclose(fp);
+		
+		}
+	}
+
+	  else if(gameState == 1)
+	{
+		iShowBMP(0, 0,"man\\high.bmp");
+
+		fp = fopen("data1.txt", "r");
+		
+		fscanf(fp, "%d", &bs);		
+		sprintf(S1, "%d", bs);
+		fclose(fp);
+		iSetColor(255,255,255);
+		iText(672,500,"YOUR SCORE IS :100",GLUT_BITMAP_TIMES_ROMAN_24);
+		iText(672,300,"YOUR SCORE IS :200",GLUT_BITMAP_TIMES_ROMAN_24);
+	    
+	}
+
+	   else if(gameState == 2){
+		   
+		   iShowBMP(0, 0, "man\\instrsn.bmp");
+	} 
+	
+	 else if(gameState == 3)
+	{
+		iShowBMP(0,0,"man\\Two.bmp");
+		
+	}
+	
+	  else if(gameState == 4)
+	{
+		exit(0);
+	} 
+
+}
+void iDraw()
+
+{
+	
+	iClear();
+	AllDrawing();
+
+
+}
+
+
+void iPassiveMouse(int x, int y)
+{
+	if((x >= 100 && x <= 380) && (y >= 100 && y <=160)){
+		a5 = false;
+		b5 = true;
+	}
+	else
+	{
+		a5 = true;
+		b5 = false;
+	}
+	if((x >= 100 && x <= 380) && (y >= 200 && y <=260)){
+		a4 = false;
+		b4 = true;
+	}
+	else
+	{
+		a4 = true;
+		b4 = false;
+	}
+
+	if((x >= 100 && x <= 380) && (y >= 300 && y <=360)){
+		a3 = false;
+		b3 = true;
+	}
+	else
+	{
+		a3 = true;
+		b3 = false;
+	}
+	if((x >= 100 && x <= 380) && (y >= 400 && y <=460)){
+		a2 = false;
+		b2 = true;
+	}
+	else
+	{
+		a2 = true;
+		b2 = false;
+	}
+	if((x >= 100 && x <= 380) && (y >= 500 && y <=560)){
+		a1 = false;
+		b1 = true;
+	}
+	else
+	{
+		a1 = true;
+		b1 = false;
+	}
+
+}
+
+
+
+void iMouseMove(int mx, int my)
+{
+	
+}
+
+
+void iMouse(int button, int state, int mx, int my)
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+
+	{
+		if((mx >= 100 && mx <= 380) && (my >= 100 && my <=160)){
+				gameState= 4;
+	        }
+		if((mx >= 100 && mx <= 380) && (my >= 200 && my <=260)){
+				gameState= 3;
+			}
+		if((mx >= 100 && mx <= 380) && (my >= 300 && my <=360)){
+				gameState= 2;
+			}
+		if((mx >= 100 && mx <= 380) && (my >= 400 && my <=460)){
+				gameState= 1;
+			}
+		if((mx >= 100 && mx <= 380) && (my >= 500 && my <=560)){
+			gameState= 0;
+			}
+
+				//if(MusicOn);
+		//PlaySound("music\\Button.wav",NULL,SND_ASYNC);
+		 
+		}
+	}
+
+
+
+
+
+void iKeyboard(unsigned char key)
+{
+	
+	if(key == 'x')
+	{
+		
+		gameState = -1;
+	}
+
+	if(key == 'y')
+	{
+		
+		exit(0);
+	}
+	if(hero_y<500 && key=='w')
+	{
+		hero_y+=100;
+		
+		
+	}
+	if(hero_x>20 &&  key=='a')
+	{
+		hero_x-=20;
+		
+	}
+	if(hero_y>250 &&  key=='s')
+	{
+		hero_y-=100;
+		
+	}
+	if(key=='d' && hero_x<=500)
+	{
+		hero_x+=30;
+		
+	
+	}
+	
+
+	if(key =='p')
+	{
+		iPauseTimer(pause1);
+		iPauseTimer(pause2);
+		iPauseTimer(pause3);
+		/*iPauseTimer(pause4);
+		iPauseTimer(pause5);
+		iPauseTimer(pause6);
+		iPauseTimer(pause7);
+		iPauseTimer(pause8);
+		iPauseTimer(pause9);
+		iPauseTimer(pause10);*/
+		iPauseTimer(pause11);
+	    iPauseTimer(pause12);
+		iPauseTimer(pause13);
+		iPauseTimer(pause14);
+		iPauseTimer(pause15);
+		iPauseTimer(pause16);
+	
+	}
+	if(key=='r')
+	{
+
+		iResumeTimer(pause1);
+		iResumeTimer(pause2);
+		iResumeTimer(pause3);
+		/*iResumeTimer(pause4);
+		iResumeTimer(pause5);
+		iResumeTimer(pause6);
+		iResumeTimer(pause7);
+		iResumeTimer(pause8);
+		iResumeTimer(pause9);
+		iResumeTimer(pause10);*/
+		iResumeTimer(pause11);
+		iResumeTimer(pause12);
+		iResumeTimer(pause13);
+		iResumeTimer(pause14);
+		iResumeTimer(pause15);
+		iResumeTimer(pause16);
+	}
+	
+	
+	
+	
+}
+
+void iSpecialKeyboard(unsigned char key)
+{
+
+}
+
+void GhasChange()
+{
+	ghas_x[0]= ghas_x[0]+dx;
+
+	if(ghas_x[0]==1340)
+	{
+		ghas_x[0]=0;
+
+	}
+	ghas_x[1]= ghas_x[1]+dx;
+
+	if(ghas_x[1]==1740)
+	{
+		ghas_x[1]=0;
+
+	}
+
+	ghas_x[2]= ghas_x[2]+dx;
+
+	if(ghas_x[2]==2140)
+	{
+		ghas_x[2]=0;
+
+	}
+
+
+}
+
+	void GuliChange()
+		{
+			
+		HeroBullet_x[0]=HeroBullet_x[0]+dy;
+		HeroBullet_x[1]=HeroBullet_x[1]+dy;
+		HeroBullet_x[2]=HeroBullet_x[2]+dy;
+		HeroBullet_x[3]=HeroBullet_x[3]+dy;
+		HeroBullet_x[4]=HeroBullet_x[4]+dy;
+
+
+		if(HeroBullet_x[0]>1520)
+		{
+		HeroBullet_x[0]=hero_x;
+		HeroBullet_y[0]=hero_y;
+		}
+
+		if(HeroBullet_x[1]>1860)
+		{
+		HeroBullet_x[1]=hero_x;
+		HeroBullet_y[1]=hero_y;
+		}
+
+		if(HeroBullet_x[2]>1710)
+		{
+		HeroBullet_x[2]=hero_x;
+		HeroBullet_y[2]=hero_y;
+		}
+		if(HeroBullet_x[3]>1160)
+		{
+		HeroBullet_x[3]=hero_x;
+		HeroBullet_y[3]=hero_y;
+		}
+					
+		if(HeroBullet_x[4]>1010)
+		{
+		HeroBullet_x[4]=hero_x;
+		HeroBullet_y[4]=hero_y;
+		}
+		 for(int i = 4; i >= 0;i--){
+		if((HeroBullet_x[i] + 10 >= monster_x) && (HeroBullet_y[i]  >=monster_y-50 && HeroBullet_y[i] <= monster_y +130)){
+				HeroBullet_x[i]=hero_x;
+			HeroBullet_y[i]=hero_y;
+			monsterLifeMain-=1;
+			monsterLifeChange-=1;
+		}
+	}
+	}
+	void BoroGuliChange()
+{
+	HeroBullet_x[5]=HeroBullet_x[5]+dyy;
+	
+		if((HeroBullet_x[5] + 22 >= monster_x) && (HeroBullet_y[5]  >=monster_y - 50 && HeroBullet_y[5] <= monster_y +130)){
+			HeroBullet_x[5]=hero_x;
+			HeroBullet_y[5]=hero_y;
+			monsterLifeMain-=5;
+			monsterLifeChange-=5;
+			dLife[green] = false;
+			green++;
+			
+		}
+	if(HeroBullet_x[5]>2760)
+		{
+		HeroBullet_x[5]=hero_x;
+		HeroBullet_y[5]=hero_y;
+
+		}
+
+}
+
+	void MonsterChange()
+{
+	monster_x += ox;
+	monster_y += oy;
+
+	if(monster_x > 850 || monster_x <650)
+	{
+	ox = -ox;
+	}
+	if(monster_y > 550 || monster_y < 250)
+	{
+	oy = -oy;
+	}
+}
+
+	void MonsterGuliChange()
+		{
+			
+		MonsterBullet_x[0]=MonsterBullet_x[0]-mdy;
+		MonsterBullet_x[1]=MonsterBullet_x[1]-mdy;
+		MonsterBullet_x[2]=MonsterBullet_x[2]-mdy;
+		MonsterBullet_x[3]=MonsterBullet_x[3]-mdy;
+		MonsterBullet_x[4]=MonsterBullet_x[4]-mdy;
+
+
+		if(MonsterBullet_x[0]<-1100)
+		{
+		MonsterBullet_x[0]=monster_x;
+		MonsterBullet_y[0]=monster_y;
+		}
+
+		if(MonsterBullet_x[1]<-1260)
+		{
+		MonsterBullet_x[1]=monster_x;
+		MonsterBullet_y[1]=monster_y;
+		}
+
+		if(MonsterBullet_x[2]<-1710)
+		{
+		MonsterBullet_x[2]=monster_x;
+		MonsterBullet_y[2]=monster_y;
+		}
+		if(MonsterBullet_x[3]<-1460)
+		{
+		MonsterBullet_x[3]=monster_x;
+		MonsterBullet_y[3]=monster_y;
+		}
+					
+		if(MonsterBullet_x[4]<-1510)
+		{
+		MonsterBullet_x[4]=monster_x;
+		MonsterBullet_y[4]=monster_y;
+		}
+		 for(int i = 4; i >= 0;i--){
+		if((MonsterBullet_x[i] + 10 <= hero_x) && (MonsterBullet_y[i]  >=hero_y-50 && MonsterBullet_y[i] <= hero_y +90)){
+				MonsterBullet_x[i]=monster_x;
+			MonsterBullet_y[i]=monster_y;
+			heroLifeMain -= 2;
+		}
+		 }
+	}
+	void MonsterBoroGuliChange()
+{
+	MonsterBullet_x[5]=MonsterBullet_x[5]-mdyy;
+if(MonsterBullet_x[5]<-2760)
+	{
+	MonsterBullet_x[5]=monster_x;
+	MonsterBullet_y[5]=monster_y;
+}
+
+	if((MonsterBullet_x[5] + 22 <= hero_x) && (MonsterBullet_y[5]  >= hero_y-50 && MonsterBullet_y[5] <= hero_y +90)){
+				MonsterBullet_x[5]=monster_x;
+			    MonsterBullet_y[5]=monster_y;
+		heroLifeMain -= 5;
+}
+
+}
+	//HeroRendering
+	void Herochange(){
+	HeroIndex++;
+	if (HeroIndex>=9)
+	HeroIndex=0;
+}
+
+
+	//MonsterRendering
+	void Monsterchange1(){
+	MonsterIndex++;
+	if (MonsterIndex>=6)
+	MonsterIndex=0;
+}
+	//MonsterRendering
+	void Monsterchange2(){
+	MonsterIndex++;
+	if (MonsterIndex>=6)
+	MonsterIndex=0;
+}
+		//MonsterRendering
+	void Monsterchange3(){
+	MonsterIndex++;
+	if (MonsterIndex>=5)
+	MonsterIndex=0;
+}
+	//MonsterRendering
+	void Monsterchange4(){
+	MonsterIndex++;
+	if (MonsterIndex>=5)
+	MonsterIndex=0;
+}
+	//MonsterRendering
+	void Monsterchange5(){
+	MonsterIndex++;
+	if (MonsterIndex>=7)
+	MonsterIndex=0;
+}
+	//MonsterRendering
+	void Monsterchange6(){
+	MonsterIndex++;
+	if (MonsterIndex>=4)
+	MonsterIndex=0;
+}
+	//MonsterRendering
+	void Monsterchange7(){
+	MonsterIndex++;
+	if (MonsterIndex>=8)
+	MonsterIndex=0;
+}
+	//MonsterRendering
+	void Monsterchange8(){
+	MonsterIndex++;
+	if (MonsterIndex>=15)
+	MonsterIndex=0;
+}
+
+	void LevelCheck(){
+
+			if(monsterLifeMain<= 300 && monsterLifeMain >200){
+			feb =false;
+			mar =true;
+			apr =false;
+			may =false;
+			monsterLifeChange = 100;
+			}
+			else if(monsterLifeMain <= 200 && monsterLifeMain >100){
+			feb =false;
+			mar =false;
+			apr =true;
+			may =false;
+			monsterLifeChange = 100;
+			}
+			else if(monsterLifeMain <= 100 && monsterLifeMain >0){
+			feb =false;
+			mar =false;
+			apr =false;
+			may =true;
+			monsterLifeChange = 100;
+			}
+			else if(monsterLifeMain <= 0)
+			{
+				YouNoob = false;
+				YouWin = true;
+			}
+			if(heroLifeMain <= 0)
+			{
+				YouWin = false;
+				YouNoob = true;
+			}
+
+		}
+
+
+	/*void speedObstacle(){
+	for(int i=0;i<100;i++){	
+	
+		
+		if(obs1[i].obstacle1On){
+			obs1[i].x -= 15;
+			length[i] = obs1[i].x - meenax;
+			length1[i] =(obs1[i].y+85)-  ( meenay+jumpcordinatey);
+
+
+			if((length[i]<=88) && (length1[i]>=25)){
+				obs1[i].obstacle1On=false;
+				
+				if(!heart2){heart3 = false;}
+				if(!heart1)
+				{heart2 = false;}
+				
+				heart1= false;
+			}
+				
+					
+			
+
+			
+			if(obs1[i].x<=0)obs1[i].obstacle1On=false;
+			
+			
+			
+		}
+		if(obs2[i].obstacle2On){
+			obs2[i].x -= 15;
+			length[i] = obs2[i].x - meenax;
+			length1[i] =(obs2[i].y+70)-  ( meenay+jumpcordinatey);
+			if(length[i]<=88 && length1[i]>=25){
+			
+				obs2[i].obstacle2On=false;
+			
+			if(!heart2){heart3 = false;}
+				if(!heart1)
+				{heart2 = false;}
+				
+				heart1= false;
+			}
+			if(obs2[i].x<=0)obs2[i].obstacle2On=false; 
+		}
+
+		if(obs3[i].obstacle3On){
+			obs3[i].x -= 15;
+			length[i] = obs3[i].x - meenax;
+				length1[i] =(obs3[i].y+58)-  ( meenay+jumpcordinatey);
+			if(length[i]<=88 && length1[i]>=14 ){
+				obs3[i].obstacle3On=false;
+			if(!heart2){heart3 = false;}
+				if(!heart1)
+				{heart2 = false;}
+				
+				heart1= false;
+			}
+			if(obs3[i].x<=0)obs3[i].obstacle3On=false; 
+		}
+
+		if(points1[i].point1On){
+			points1[i].x -= 15;
+			length[i] = points1[i].x - meenax;
+				length1[i] =(points1[i].y+40)-  ( meenay+jumpcordinatey);
+			if(length[i]<=88 && length1[i]>=14 )
+				{points1[i].point1On=false;
+			scoree+=10;}
+
+			
+			if(points1[i].x<=0)points1[i].point1On=false; 
+		}
+
+			if(points2[i].point2On){
+			points2[i].x -= 15;
+			length[i] = points2[i].x - meenax;
+				length1[i] =(points2[i].y+40)-  ( meenay+jumpcordinatey);
+			if(length[i]<=88 && length1[i]<=200 )
+			{	points2[i].point2On=false;
+			    scoree+=10;
+			}
+			
+			if(points2[i].x<=0)points2[i].point2On=false; 
+		}
+
+	}
+}*/
+
+	void score()
+{
+	if(gameState == 0)
+		
+		
+		
+		{
+		scoree++;
+		
+		}
+	sc = scoree;
+
+	sprintf(S, "SCORE: %d", sc);
+	sprintf(S2, "%d", sc);
+	
+	if(bestScore<sc)
+	{
+		bestScore = sc;
+	}
+
+}
+
+
+int main(){
+
+	pause1 = iSetTimer(20,GhasChange);
+	pause2 = iSetTimer(500,Herochange);
+
+	pause3 = iSetTimer(500,Monsterchange1);
+/*	pause4 = iSetTimer(500,Monsterchange2);
+	pause5 = iSetTimer(500,Monsterchange3);
+	pause6 = iSetTimer(500,Monsterchange4);
+	pause7 = iSetTimer(500,Monsterchange5);
+	pause8 = iSetTimer(500,Monsterchange6);
+	pause9 = iSetTimer(500,Monsterchange7);
+	pause10 = iSetTimer(500,Monsterchange8);*/
+
+    pause11 = iSetTimer(50,GuliChange);
+	pause12 = iSetTimer(1,BoroGuliChange);
+	pause13 = iSetTimer(100,MonsterGuliChange);
+	pause14 = iSetTimer(1,MonsterBoroGuliChange);
+	pause15 = iSetTimer(60, MonsterChange);
+	pause16 = iSetTimer(1,LevelCheck);
+
+
+	dx = 5;
+
+
+		iPauseTimer(pause1);
+		iPauseTimer(pause2);
+		iPauseTimer(pause3);
+
+		/*iPauseTimer(pause4);
+		iPauseTimer(pause5);
+		iPauseTimer(pause6);
+		iPauseTimer(pause7);
+		iPauseTimer(pause8);
+		iPauseTimer(pause9);
+		iPauseTimer(pause10);*/
+
+		iPauseTimer(pause11);
+	    iPauseTimer(pause12);
+		iPauseTimer(pause13);
+		iPauseTimer(pause14);
+		iPauseTimer(pause15);
+		iPauseTimer(pause16);
+
+	if(musicOn);
+	//PlaySound("music\\Play1.wav",NULL,SND_LOOP | SND_ASYNC);
+
+	iInitialize(1000, 750, "SiTaEra's BattleGround");
+
+/*  int i, j, temp;
+  int index[SIZE];
+  player p[SIZE]={
+  {"Anik",187, 4},
+  {"Rumi", 194, 5},
+  {"Evan", 190, 5},
+  {"Sinan", 210, 6},
+  {"Tanaji", 208, 6}};
+ 
+  printf("\n\n");
+ 
+  for(i=0;i<SIZE;i++)  //simple initialization for the index array
+    index[i] = i;
+ 
+  //simple substitution sort, using the index
+  for(i=0;i<SIZE-1;i++) {
+    for(j=i+1;j<SIZE;j++) {
+      if(p[index[i]].score < p[index[j]].score) { //compare thru the index
+        temp=index[i];    //and swap only the indices
+        index[i] = index[j];
+        index[j] = temp;
+      }
+    }
+  }
+  //show the order of the actual data:
+  printf("Players in unsorted order: \n\n");
+  for(i=0;i<SIZE;i++) {
+    printf("%20s  %3d  %2d\n", p[i].name,p[i].score,p[i].level);
+  }
+  //show the sorted order of the data:
+  printf("\nPlayers sorted by scores: \n\n");
+  for(i=0;i<SIZE;i++) {
+    printf("%20s  %3d  %2d\n", p[index[i]].name,p[index[i]].score,p[index[i]].level);
+  }
+  printf("\n\n\t\t\t     press enter when ready");
+  (void) getchar();*/ 
+
+	iStart();
+
+	return 0;
+
+
+}

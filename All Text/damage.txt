@@ -1,0 +1,686 @@
+#include "iGraphics.h"
+#include "bitmap_loader.h"
+#include<stdio.h>
+#include<iostream>
+
+void gamePlayView();
+void AllGuli();
+void Gameplay();
+void health();
+
+bool jan = false;
+bool feb = true;
+bool mar = false;
+bool apr = false;
+bool may = false;
+
+bool a1 = true;
+bool a2 = true;
+bool a3 = true;
+bool a4 = true;
+bool a5 = true;
+
+
+bool b1 = false;
+bool b2 = false;
+bool b3 = false;
+bool b4 = false;
+bool b5 = false;
+
+
+
+int g[5] ;
+
+//Variable section :
+//Menu
+int mposx, mposy;
+
+int gameState =-1;
+
+//Hero
+char Hero[9][15]={"Hero\\Hero1.bmp","Hero\\Hero2.bmp","Hero\\Hero3.bmp","Hero\\Hero4.bmp","Hero\\Hero5.bmp","Hero\\Hero6.bmp","Hero\\Hero7.bmp","Hero\\Hero8.bmp","Hero\\Hero9.bmp"};
+
+int HeroIndex=0;
+
+//Monster
+char Monster[8][25]={"Monster1\\Monster1.bmp","Monster1\\Monster2.bmp","Monster1\\Monster3.bmp","Monster1\\Monster4.bmp"};
+
+int MonsterIndex=0;
+
+//Background
+
+double monsterLifeMain = 400;
+double monsterLifeChange = 100;		// to be displayed
+
+
+double heroLifeMain =200;
+
+
+
+
+bool YouNoob = true;
+bool YouWin = true;
+
+
+
+
+int pause1,pause2,pause3,pause4,pause5,pause6,pause7,pause8,pause9;					 //for resume and pause purpose
+
+double hero_x=20;							//hero x co ordinate
+double hero_y=400;							//hero y co ordinate
+
+double monster_x = 850;						//monster x co ordinate
+double monster_y = 300;						//monster y co ordinate
+
+int dx=10;									// for ghas;
+int dy=50;									//for hero guli		
+int dyy=5;									//for hero boro hero guli
+int ox =5;									//for monster
+int oy =5;									//for monster
+int mdy =50;								// for monster guli
+int mdyy = 5;								// for monster boro guli
+
+
+double monsterCopy_x=monster_x;				//to store the value between guli and monster
+double monsterCopy_y=monster_y;				//to store the value between guli and monster	
+
+
+double heroCopy_x=hero_x;					//to store the value between guli and hero
+double heroCopy_y=hero_y;					//to store the valuebetween guli and hero
+
+
+											//Bullet of hero
+
+int HeroBullet_x[] ={heroCopy_x,heroCopy_x,heroCopy_x,heroCopy_x,heroCopy_x,heroCopy_x};
+int HeroBullet_y[] ={heroCopy_y,heroCopy_y,heroCopy_y,heroCopy_y,heroCopy_y,heroCopy_y};
+
+											//Bullet of Monster
+
+int MonsterBullet_x[]= {monsterCopy_x,monsterCopy_x,monsterCopy_x,monsterCopy_x,monsterCopy_x,monsterCopy_x};
+int MonsterBullet_y[]= {monsterCopy_y,monsterCopy_y,monsterCopy_y,monsterCopy_y,monsterCopy_y,monsterCopy_y};
+
+
+int ghas_x[] = {0,0,0};
+
+
+
+bool musicOn=true;
+bool MusicOn=false;
+
+
+
+void Gameplay()
+{
+	
+	iSetColor(255,0,0);
+		  iShowBMP2(hero_x,hero_y,Hero[HeroIndex],255); 
+		 // iShowBMP2(monster_x, monster_y,Monster[MonsterIndex],255);
+		if(feb)  iFilledRectangle(monster_x, monster_y,100,100);
+		if(mar)  iFilledRectangle(monster_x, monster_y,50,50);
+		if(apr)  iFilledRectangle(monster_x, monster_y,150,150);
+		if(may)  iFilledRectangle(monster_x, monster_y,200,200);
+	
+}
+
+
+
+void gamePlayView(){
+
+	iShowBMP(0,0,"Green.bmp");
+	//vumi
+	iSetColor(34,23,4);
+	iFilledRectangle(0,0,1000,25);
+	iSetColor(156,113,38);
+	iFilledRectangle(0,25,1000,25);
+	iSetColor(218,150,33);
+	iFilledRectangle(0,50,1000,25);
+	// loha
+	iSetColor(48,11,15);
+	for(int i =100; i <400 ; i+=100)
+	iFilledRectangle(1000+i-ghas_x[0],75,20,40);
+
+	iSetColor(92,78,80);
+	for(int i= 300;i<700;i+=100)
+	iFilledRectangle(1000+i-ghas_x[0],75,10,60);
+	
+	iSetColor(48,11,15);
+	for(int i = 700;i<1200;i+=100)
+	iFilledRectangle(1000+760-ghas_x[1],75,32,55);
+	
+	iSetColor(92,78,80);
+	iFilledRectangle(1000+1160-ghas_x[2],75,10,40);
+
+	iSetColor(34,23,4);
+	iFilledRectangle(100,700,200,25);
+	iSetColor(156,113,38);
+	iFilledRectangle(600,700,200,25);
+	
+}
+
+
+
+void AllGuli(){
+	
+	// Hero guli
+
+iSetColor(255,0,0);
+	for(int i =0 ;i<6;i++)
+	iFilledRectangle(HeroBullet_x[i]+10,HeroBullet_y[i]+50,10,10);
+	iFilledCircle(HeroBullet_x[5]+30,HeroBullet_y[5]+50,22,1000);
+	iSetColor(250,243,25);
+	iFilledCircle(HeroBullet_x[5]+30,HeroBullet_y[5]+50,12,1000);
+
+	// monster guli
+	 iSetColor(0,0,0);
+	 for(int i =0; i<6; i++)
+	iFilledRectangle(MonsterBullet_x[i]+10,MonsterBullet_y[i]+50,10,10);
+	 iFilledCircle(MonsterBullet_x[5]+30,MonsterBullet_y[5]+50,22,1000);
+	 iSetColor(80,12,239);
+	 iFilledCircle(MonsterBullet_x[5]+30,MonsterBullet_y[5]+50,12,1000);
+
+	
+	
+}
+
+
+void AllDrawing(){
+
+	 if(gameState ==-1)
+	{
+		//Homemenu
+		iShowBMP(0, 0, "man\\home.bmp");
+		iShowBMP2(500,100,"MainMenu2.bmp",255);
+		iShowBMP2(700,100,"MainMenu1.bmp",255);
+		
+		if(a1)iShowBMP(100,500,"man\\A.bmp");
+		if(a2)iShowBMP(100,400,"man\\A.bmp");
+		if(a3)iShowBMP(100,300,"man\\A.bmp");
+		if(a4)iShowBMP(100,200,"man\\A.bmp");
+		if(a5)iShowBMP(100,100,"man\\A.bmp");
+
+		if(b1)iShowBMP(100,500,"man\\B.bmp");
+		if(b2)iShowBMP(100,400,"man\\B.bmp");
+		if(b3)iShowBMP(100,300,"man\\B.bmp");
+		if(b4)iShowBMP(100,200,"man\\B.bmp");
+		if(b5)iShowBMP(100,100,"man\\B.bmp");
+	
+	}
+	  else if(gameState == 0)
+	{
+		if(YouWin && YouNoob){
+		gamePlayView();
+		AllGuli();
+		Gameplay();
+		}
+		else if(YouWin ){
+			iShowBMP(10,10,"One.bmp");
+		}
+		else if(YouNoob){
+			iShowBMP(10,10,"Two.bmp");
+		}
+	}
+
+	  else if(gameState == 1)
+	{
+		iShowBMP(0, 0,"man\\high.bmp");
+	
+	}
+
+	   else if(gameState == 2){
+		   
+		   iShowBMP(0, 0, "man\\instrsn.bmp");
+	} 
+	
+	 else if(gameState == 3)
+	{
+		iShowBMP(0,0,"man\\Two.bmp");
+		
+	}
+	
+	  else if(gameState == 4)
+	{
+		exit(0);
+	} 
+	 
+	 
+
+	
+}
+void iDraw()
+{
+	iClear();
+	AllDrawing();
+}
+
+
+void iPassiveMouse(int x, int y)
+{
+	if((x >= 100 && x <= 380) && (y >= 100 && y <=160)){
+		a5 = false;
+		b5 = true;
+	}
+	else
+	{
+		a5 = true;
+		b5 = false;
+	}
+	if((x >= 100 && x <= 380) && (y >= 200 && y <=260)){
+		a4 = false;
+		b4 = true;
+	}
+	else
+	{
+		a4 = true;
+		b4 = false;
+	}
+
+	if((x >= 100 && x <= 380) && (y >= 300 && y <=360)){
+		a3 = false;
+		b3 = true;
+	}
+	else
+	{
+		a3 = true;
+		b3 = false;
+	}
+	if((x >= 100 && x <= 380) && (y >= 400 && y <=460)){
+		a2 = false;
+		b2 = true;
+	}
+	else
+	{
+		a2 = true;
+		b2 = false;
+	}
+	if((x >= 100 && x <= 380) && (y >= 500 && y <=560)){
+		a1 = false;
+		b1 = true;
+	}
+	else
+	{
+		a1 = true;
+		b1 = false;
+	}
+
+}
+
+
+
+void iMouseMove(int mx, int my)
+{
+	
+}
+
+
+void iMouse(int button, int state, int mx, int my)
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+
+	{
+		if((mx >= 100 && mx <= 380) && (my >= 100 && my <=160)){
+				gameState= 4;
+	        }
+		if((mx >= 100 && mx <= 380) && (my >= 200 && my <=260)){
+				gameState= 3;
+			}
+		if((mx >= 100 && mx <= 380) && (my >= 300 && my <=360)){
+				gameState= 2;
+			}
+		if((mx >= 100 && mx <= 380) && (my >= 400 && my <=460)){
+				gameState= 1;
+			}
+		if((mx >= 100 && mx <= 380) && (my >= 500 && my <=560)){
+			gameState= 0;
+			}
+
+				//if(MusicOn);
+		//PlaySound("music\\Button.wav",NULL,SND_ASYNC);
+		 
+		}
+	}
+
+
+
+
+
+void iKeyboard(unsigned char key)
+{
+	
+	if(key == 'x')
+	{
+		
+		gameState = -1;
+	}
+
+	if(key == 'y')
+	{
+		
+		exit(0);
+	}
+	if(hero_y<500 && key=='w')
+	{
+		hero_y+=100;
+		
+		
+	}
+	if(hero_x>20 &&  key=='a')
+	{
+		hero_x-=20;
+		
+	}
+	if(hero_y>250 &&  key=='s')
+	{
+		hero_y-=100;
+		
+	}
+	if(key=='d' && hero_x<=500)
+	{
+		hero_x+=30;
+		
+	
+	}
+	
+
+	if(key =='p')
+	{
+		iPauseTimer(pause1);
+		iPauseTimer(pause2);
+		iPauseTimer(pause3);
+		iPauseTimer(pause4);
+		iPauseTimer(pause5);
+		iPauseTimer(pause6);
+		iPauseTimer(pause7);
+		iPauseTimer(pause8);
+		
+	
+	}
+	if(key=='r')
+	{
+
+		iResumeTimer(pause1);
+		iResumeTimer(pause2);
+		iResumeTimer(pause3);
+		iResumeTimer(pause4);
+		iResumeTimer(pause5);
+		iResumeTimer(pause6);
+		iResumeTimer(pause7);
+		iResumeTimer(pause8);
+		iResumeTimer(pause9);
+	}
+	
+	
+	
+	
+}
+
+void iSpecialKeyboard(unsigned char key)
+{
+
+}
+
+void GhasChange()
+{
+	ghas_x[0]= ghas_x[0]+dx;
+
+	if(ghas_x[0]==1340)
+	{
+		ghas_x[0]=0;
+
+	}
+	ghas_x[1]= ghas_x[1]+dx;
+
+	if(ghas_x[1]==1740)
+	{
+		ghas_x[1]=0;
+
+	}
+
+	ghas_x[2]= ghas_x[2]+dx;
+
+	if(ghas_x[2]==2140)
+	{
+		ghas_x[2]=0;
+
+	}
+
+
+}
+
+	void GuliChange()
+		{
+			
+		HeroBullet_x[0]=HeroBullet_x[0]+dy;
+		HeroBullet_x[1]=HeroBullet_x[1]+dy;
+		HeroBullet_x[2]=HeroBullet_x[2]+dy;
+		HeroBullet_x[3]=HeroBullet_x[3]+dy;
+		HeroBullet_x[4]=HeroBullet_x[4]+dy;
+
+
+		if(HeroBullet_x[0]>1520)
+		{
+		HeroBullet_x[0]=hero_x;
+		HeroBullet_y[0]=hero_y;
+		}
+
+		if(HeroBullet_x[1]>1860)
+		{
+		HeroBullet_x[1]=hero_x;
+		HeroBullet_y[1]=hero_y;
+		}
+
+		if(HeroBullet_x[2]>1710)
+		{
+		HeroBullet_x[2]=hero_x;
+		HeroBullet_y[2]=hero_y;
+		}
+		if(HeroBullet_x[3]>1160)
+		{
+		HeroBullet_x[3]=hero_x;
+		HeroBullet_y[3]=hero_y;
+		}
+					
+		if(HeroBullet_x[4]>1010)
+		{
+		HeroBullet_x[4]=hero_x;
+		HeroBullet_y[4]=hero_y;
+		}
+		 for(int i = 4; i >= 0;i--){
+		if((HeroBullet_x[i] + 10 >= monster_x) && (HeroBullet_y[i]  >=monster_y-50 && HeroBullet_y[i] <= monster_y +130)){
+				HeroBullet_x[i]=hero_x;
+			HeroBullet_y[i]=hero_y;
+			monsterLifeMain-=0.5;
+			monsterLifeChange-=0.5;
+		}
+	}
+	}
+	void BoroGuliChange()
+{
+	HeroBullet_x[5]=HeroBullet_x[5]+dyy;
+	
+		if((HeroBullet_x[5] + 22 >= monster_x) && (HeroBullet_y[5]  >=monster_y - 50 && HeroBullet_y[5] <= monster_y +130)){
+			HeroBullet_x[5]=hero_x;
+			HeroBullet_y[5]=hero_y;
+			monsterLifeMain-=5;
+			monsterLifeChange-=5;
+			
+		}
+	if(HeroBullet_x[5]>2760)
+		{
+		HeroBullet_x[5]=hero_x;
+		HeroBullet_y[5]=hero_y;
+
+		}
+
+}
+
+	void MonsterChange()
+{
+	monster_x += ox;
+	monster_y += oy;
+
+	if(monster_x > 850 || monster_x <650)
+	{
+	ox = -ox;
+	}
+	if(monster_y > 550 || monster_y < 250)
+	{
+	oy = -oy;
+	}
+}
+
+	void MonsterGuliChange()
+		{
+			
+		MonsterBullet_x[0]=MonsterBullet_x[0]-mdy;
+		MonsterBullet_x[1]=MonsterBullet_x[1]-mdy;
+		MonsterBullet_x[2]=MonsterBullet_x[2]-mdy;
+		MonsterBullet_x[3]=MonsterBullet_x[3]-mdy;
+		MonsterBullet_x[4]=MonsterBullet_x[4]-mdy;
+
+
+		if(MonsterBullet_x[0]<-1100)
+		{
+		MonsterBullet_x[0]=monster_x;
+		MonsterBullet_y[0]=monster_y;
+		}
+
+		if(MonsterBullet_x[1]<-1260)
+		{
+		MonsterBullet_x[1]=monster_x;
+		MonsterBullet_y[1]=monster_y;
+		}
+
+		if(MonsterBullet_x[2]<-1710)
+		{
+		MonsterBullet_x[2]=monster_x;
+		MonsterBullet_y[2]=monster_y;
+		}
+		if(MonsterBullet_x[3]<-1460)
+		{
+		MonsterBullet_x[3]=monster_x;
+		MonsterBullet_y[3]=monster_y;
+		}
+					
+		if(MonsterBullet_x[4]<-1510)
+		{
+		MonsterBullet_x[4]=monster_x;
+		MonsterBullet_y[4]=monster_y;
+		}
+		 for(int i = 4; i >= 0;i--){
+		if((MonsterBullet_x[i] + 10 <= hero_x) && (MonsterBullet_y[i]  >=hero_y-50 && MonsterBullet_y[i] <= hero_y +90)){
+				MonsterBullet_x[i]=monster_x;
+			MonsterBullet_y[i]=monster_y;
+			heroLifeMain -= 0.5;
+		}
+		 }
+	}
+	void MonsterBoroGuliChange()
+{
+	MonsterBullet_x[5]=MonsterBullet_x[5]-mdyy;
+if(MonsterBullet_x[5]<-2760)
+	{
+	MonsterBullet_x[5]=monster_x;
+	MonsterBullet_y[5]=monster_y;
+}
+
+	if((MonsterBullet_x[5] + 22 <= hero_x) && (MonsterBullet_y[5]  >= hero_y-50 && MonsterBullet_y[5] <= hero_y +90)){
+				MonsterBullet_x[5]=monster_x;
+			    MonsterBullet_y[5]=monster_y;
+		heroLifeMain -= 5;
+}
+
+}
+
+	void Herochange(){
+	HeroIndex++;
+	if (HeroIndex>=9)
+	HeroIndex=0;
+}
+
+		void Monsterchange(){
+	MonsterIndex++;
+	if (MonsterIndex>=4)
+	MonsterIndex=0;
+}
+
+	void LevelCheck(){
+
+			if(monsterLifeMain<= 300 && monsterLifeMain >200){
+			feb =false;
+			mar =true;
+			apr =false;
+			may =false;
+			monsterLifeChange = 100;
+			}
+			else if(monsterLifeMain <= 200 && monsterLifeMain >100){
+			feb =false;
+			mar =false;
+			apr =true;
+			may =false;
+			monsterLifeChange = 100;
+			}
+			else if(monsterLifeMain <= 100 && monsterLifeMain >0){
+			feb =false;
+			mar =false;
+			apr =false;
+			may =true;
+			monsterLifeChange = 100;
+			}
+			else if(monsterLifeMain <= 0)
+			{
+				YouNoob = false;
+				YouWin = true;
+			}
+			if(heroLifeMain <= 0)
+			{
+				YouWin = false;
+				YouNoob = true;
+			}
+
+		}
+
+
+
+int main(){
+
+	pause1 = iSetTimer(20,GhasChange);
+	pause2 = iSetTimer(500,Herochange);
+	pause3 = iSetTimer(500,Monsterchange);
+	pause4 = iSetTimer(50,GuliChange);
+	pause5 = iSetTimer(1,BoroGuliChange);
+	pause6 = iSetTimer(100,MonsterGuliChange);
+	pause7 = iSetTimer(1,MonsterBoroGuliChange);
+	pause8 = iSetTimer(60, MonsterChange);
+	pause9 = iSetTimer(1,LevelCheck);
+
+
+	dx = 5;
+
+
+		iPauseTimer(pause1);
+		iPauseTimer(pause2);
+		iPauseTimer(pause3);
+		iPauseTimer(pause4);
+		iPauseTimer(pause5);
+		iPauseTimer(pause6);
+		iPauseTimer(pause7);
+		iPauseTimer(pause8);
+		
+
+
+	
+
+	if(musicOn);
+	PlaySound("music\\Play1.wav",NULL,SND_LOOP | SND_ASYNC);
+
+
+	iInitialize(1000, 750, "Demo");
+
+	iStart();
+
+	return 0;
+
+
+}
+
+

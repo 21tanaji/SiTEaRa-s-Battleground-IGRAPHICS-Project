@@ -1,0 +1,139 @@
+#include "iGraphics.h"
+#include <stdio.h> 
+
+ //int circle_x =100, circle_y =150;
+
+ //int rectangle_x3 =200,rectangle_y3 =100;
+
+
+ //int dx,dy;
+ //int rectangletimer1,rectangletimer2,rectangletimer3;
+
+ int flag=0;
+ int x11=67;
+ int y11=225;
+ int x22=x11+200;
+ int y22=y11+40;
+ 
+ char str1[100];
+ int len1=0;
+
+ void DraRec1(){
+	
+	  if(flag==0)
+	  {
+	 iRectangle(67,225, 200,40);
+	 iText(x11+20,y11+10,str1);
+	  }
+	  if(flag==1) 
+	  {
+		  iSetColor(255, 0, 0);
+
+		  iRectangle(67,225, 200,40);
+		   iText(x11+20,y11+10+10,str1);
+			  iSetColor(255, 255, 255);
+	  }
+ }
+
+void iDraw()
+{
+	iClear();
+	DraRec1();
+	
+
+	//iSetColor(108, 104, 106);
+  //  iFilledRectangle(rectangle_x2, rectangle_y2,2000,50);
+	//iSetColor(108, 104, 106);
+	//  iFilledRectangle(rectangle_x3, rectangle_y3,2000,50);
+	iSetColor(0, 255, 255);
+	iText(100,300, "HELLOW",GLUT_BITMAP_TIMES_ROMAN_24);
+	
+}
+
+void iMouseMove(int mx, int my)
+{
+	//place your codes here
+}
+
+void iPassiveMouse(int mx, int my)
+{
+	//place your codes here
+}
+
+void iMouse(int button, int state, int mx, int my)
+{
+
+	//place your codes here
+
+	if(mx >= x11 && mx <= x22 && my >= y11 && my <= y22)
+	{
+		flag=1;
+	}
+	else
+	{
+		flag=0;
+	}
+	printf("%d\t%d\n",mx,my);
+}
+
+
+void iKeyboard(unsigned char key)
+{
+	if(flag==1)
+	{
+		str1[len1]=key;
+		len1++;
+	}
+}
+
+void iSpecialKeyboard(unsigned char key)
+{
+
+	if(key == GLUT_KEY_END)
+	{
+		exit(0);
+	}
+}
+
+
+/*void rectangleChange1(){
+	x1 -= dx;
+
+	if(x1==-1000)
+	{
+		x1=1000;
+	}
+}
+void rectangleChange2(){
+	rectangle_x2 -= dx;
+
+	if(rectangle_x2==-1000)
+	{
+		rectangle_x2=1000;
+	}
+}
+void rectangleChange3(){
+	rectangle_x3 -= dx;
+
+	if(rectangle_x3==-1000)
+	{
+		rectangle_x3=1000;
+	}
+}*/
+
+
+int main()
+{
+	//circletimer = iSetTimer(1, circleChange);
+	//rectangletimer1 = iSetTimer(1, rectangleChange1);
+	//rectangletimer2 = iSetTimer(1, rectangleChange2);
+	//rectangletimer3 = iSetTimer(1, rectangleChange3);
+
+	//dx = 5;
+	
+	iInitialize(400, 400, "Object Demo");
+	 
+    iStart();
+	return 0;
+}
+

@@ -1,0 +1,556 @@
+#include "iGraphics.h"
+#include "bitmap_loader.h"
+#include<stdio.h>
+
+int pause1,pause2,pause3;					 //for resume and pause purpose
+
+double bakso_x=20;							//hero x co ordinate
+double bakso_y=400;							//hero y co ordinate
+
+double monster_x = 950;						//monster x co ordinate
+double monster_y = 450;						//monster y co ordinate
+
+double pic_x1=0;								//background co ordinent
+double pic_y1=0;								//background co ordinent
+
+double pic_x2=0;								//background co ordinent
+double pic_y2=0;								//background co ordinent
+
+double pic_x3=0;								//background co ordinent
+double pic_y3=0;								//background co ordinent
+
+int dx=10;									// for ghas;
+int bx=10;									//for background
+int dy=10;									//for guli
+		
+int dyy=6;									//boro guli
+
+int ox =3;									//for monster
+int oy =2;									//for monster
+
+int mdy =10;
+
+double monsterCopy_x=monster_x;
+double monsterCopy_y=monster_y;
+
+
+double baksoCopy_x=bakso_x;					//to store the value
+double baksoCopy_y=bakso_y;					//to store the value
+
+//Bullet of hero
+
+double guli_x1=baksoCopy_x;
+double guli_y1=baksoCopy_y;
+
+double guli_x2=baksoCopy_x;
+double guli_y2=baksoCopy_y;
+
+double guli_x3=baksoCopy_x;
+double guli_y3=baksoCopy_y;
+
+double guli_x4=baksoCopy_x;
+double guli_y4=baksoCopy_y;
+
+double guli_x5=baksoCopy_x;
+double guli_y5=baksoCopy_y;
+
+double guli_x6=baksoCopy_x;
+double guli_y6=baksoCopy_y;
+
+//Bullet of Monster
+
+double Mguli_x1=monsterCopy_x;
+double Mguli_y1=monsterCopy_y;
+
+double Mguli_x2=monsterCopy_x;
+double Mguli_y2=monsterCopy_y;
+
+double Mguli_x3=monsterCopy_x;
+double Mguli_y3=monsterCopy_y;
+
+double Mguli_x4=monsterCopy_x;
+double Mguli_y4=monsterCopy_y;
+
+double Mguli_x5=monsterCopy_x;
+double Mguli_y5=monsterCopy_y;
+
+double Mguli_x6=monsterCopy_x;
+double Mguli_y6=monsterCopy_y;
+
+// base
+
+double ghas1_x=0;
+double ghas2_x=0;
+double ghas3_x=0;
+
+
+bool musicOn=true;
+
+// hero background (1 rectangle)
+
+
+void background1(){
+	iShowBMP(0,0,"One.bmp");
+}
+
+void background2(){
+	iShowBMP(1000-pic_x2,02,"One.bmp");
+}
+
+void background3(){
+	iShowBMP(1000-pic_x3,pic_y3,"One.bmp");
+}
+
+
+
+// frame drawing method  (3 rectangle)
+void Vumi()
+{	
+	iShowBMP2(0,0,"Madi.bmp",255);
+}
+void upperBorder()
+{
+	iSetColor(101,8,8);
+	 iFilledRectangle(0,900,1000,50);
+
+}
+
+
+void Ghas1(){
+	iSetColor(0,0,0);
+
+	iShowBMP2(1000+100-ghas1_x,225,"ghas3.bmp",255);
+	iShowBMP2(1000+160-ghas1_x,225,"ghas3.bmp",255);
+
+	iShowBMP2(1000+300-ghas1_x,225,"ghas3.bmp",255);
+	iShowBMP2(1000+360-ghas1_x,225,"ghas3.bmp",255);
+
+	
+
+}
+
+void Ghas2()
+{
+	iSetColor(0,0,0);
+
+
+	iShowBMP2(1000+500-ghas2_x,225,"ghas3.bmp",255);
+	iShowBMP2(1000+560-ghas2_x,225,"ghas3.bmp",255);
+
+	iShowBMP2(1000+700-ghas2_x,225,"ghas3.bmp",255);
+	iShowBMP2(1000+760-ghas2_x,225,"ghas3.bmp",255);
+
+}
+void Ghas3()
+{
+	iSetColor(0,0,0);
+	iShowBMP2(1000+900-ghas3_x,225,"ghas3.bmp",255);
+	iShowBMP2(1000+960-ghas3_x,225,"ghas3.bmp",255);
+
+	iShowBMP2(1000+1100-ghas3_x,225,"ghas3.bmp",255);
+	iShowBMP2(1000+1160-ghas3_x,225,"ghas3.bmp",255);
+}
+// hero drawing method (1 rectangle)
+void Hero()
+{
+ iSetColor(0,0,0);
+
+	 iShowBMP2(bakso_x,bakso_y,"nayak.bmp",255);
+}
+
+ 
+void Monster()
+{
+  iSetColor(0,0,0); 
+  iShowBMP2(monster_x, monster_y,"monster.bmp",255);
+}
+
+
+// Bullets Drawing method for hero (5 regular bullets of point and one big bullets of circle)
+void Guli_1()
+{
+	 iSetColor(0,0,0);
+	iPoint(guli_x1+10,guli_y1+50,10);
+}
+void Guli_2()
+{
+	iPoint(guli_x2+35,guli_y2+50,10);
+}
+void Guli_3()
+{
+	
+	iPoint(guli_x3+35,guli_y3+50,10);
+}
+void Guli_4()
+{
+	
+	iPoint(guli_x4+35,guli_y4+50,10);
+}
+void Guli_5()
+{
+	iPoint(guli_x5+35,guli_y5+50,10);
+}
+void Guli_6()
+{
+	iFilledCircle(guli_x6+30,guli_y6+50,22,1000);
+}
+
+
+// Bullets Drawing method for monster(5 regular bullets of point and one big bullets of circle)
+void Mguli_1()
+{
+	 iSetColor(0,0,255);
+	iPoint(Mguli_x1+10,Mguli_y1+10,10);
+}
+void Mguli_2()
+{
+	iPoint(Mguli_x2+35,Mguli_y2+10,10);
+}
+void Mguli_3()
+{
+	
+	iPoint(Mguli_x3+35,Mguli_y3+10,10);
+}
+void Mguli_4()
+{
+	
+	iPoint(Mguli_x4+35,Mguli_y4+10,10);
+}
+void Mguli_5()
+{
+	iPoint(Mguli_x5+35,Mguli_y5+10,10);
+}
+void Mguli_6()
+{
+	iFilledCircle(Mguli_x6+30,Mguli_y6+10,22,1000);
+}
+
+void iDraw()
+{
+	 iClear();
+	    background1();
+		background2();
+		background3();
+	     Vumi();
+	
+	Ghas1();
+	  Ghas2();
+	   Ghas3();
+
+	   //upperBorder();
+	
+
+
+	  Guli_1();
+	   Guli_2();
+	    Guli_3();
+		 Guli_4();
+		  Guli_5();
+		   Guli_6();
+
+
+		   
+	  Mguli_1();
+	   Mguli_2();
+	    Mguli_3();
+		 Mguli_4();
+		  Mguli_5();
+		   Mguli_6();
+	
+	
+	 Hero();
+	 Monster();
+	 
+}
+
+void iPassiveMouse(int x, int y)
+{
+	
+}
+
+
+
+void iMouseMove(int mx, int my)
+{
+	
+}
+
+
+void iMouse(int button, int state, int mx, int my)
+{
+	
+}
+
+
+
+void iKeyboard(unsigned char key)
+{
+	
+	
+	if(bakso_y<800 && key=='w')
+	{
+		bakso_y+=100;
+		
+		
+	}
+	if(bakso_x>20 &&  key=='a')
+	{
+		bakso_x-=20;
+		
+	}
+	if(bakso_y>400 &&  key=='s')
+	{
+		bakso_y-=100;
+		
+	}
+	if(key=='d' && bakso_x<=500)
+	{
+		bakso_x+=30;
+		
+	
+	}
+	
+
+	if(key =='p')
+	{
+
+		iPauseTimer(pause1);
+		iPauseTimer(pause2);
+		iPauseTimer(pause3);
+
+	}
+	if(key=='r')
+	{
+
+		iResumeTimer(pause1);
+		iResumeTimer(pause2);
+		iResumeTimer(pause3);
+	}
+	
+	
+	
+	
+}
+
+/*
+ function iSpecialKeyboard() is called whenver user hits special keys like-
+ function keys, home, end, pg up, pg down, arraows etc. you have to use
+ appropriate constants to detect them. A list is:
+ GLUT_KEY_F1, GLUT_KEY_F2, GLUT_KEY_F3, GLUT_KEY_F4, GLUT_KEY_F5, GLUT_KEY_F6,
+ GLUT_KEY_F7, GLUT_KEY_F8, GLUT_KEY_F9, GLUT_KEY_F10, GLUT_KEY_F11, GLUT_KEY_F12,
+ GLUT_KEY_LEFT, GLUT_KEY_UP, GLUT_KEY_RIGHT, GLUT_KEY_DOWN, GLUT_KEY_PAGE UP,
+ GLUT_KEY_PAGE DOWN, GLUT_KEY_HOME, GLUT_KEY_END, GLUT_KEY_INSERT
+ */
+void iSpecialKeyboard(unsigned char key)
+{
+
+}
+
+void backGroundChange1(){
+	pic_x1=pic_x1+bx;
+	if(pic_x1==1000)
+	{
+		pic_x1=-1000;
+	}
+}
+
+void backGroundChange2(){
+	pic_x2=pic_x2+bx;
+	if(pic_x2==1000)
+	{
+		pic_x2=-1000;
+	}
+}
+
+void backGroundChange3(){
+	pic_x3=pic_x3+bx;
+	if(pic_x3==1000)
+	{
+		pic_x3=-1000;
+	}
+}
+
+
+void GhasChange_1()
+{
+	ghas1_x= ghas1_x+dx;
+
+	if(ghas1_x==1340)
+	{
+		ghas1_x=0;
+
+	}
+}
+	void GhasChange_2()
+{
+	ghas2_x= ghas2_x+dx;
+
+	if(ghas2_x==1740)
+	{
+		ghas2_x=0;
+
+	}
+}
+	void GhasChange_3()
+{
+	ghas3_x= ghas3_x+dx;
+
+	if(ghas3_x==2140)
+	{
+		ghas3_x=0;
+
+	}
+
+
+}
+
+	void GuliChange()
+		{
+			
+		guli_x1=guli_x1+dy;
+		guli_x2=guli_x2+dy;
+		guli_x3=guli_x3+dy;
+		guli_x4=guli_x4+dy;
+		guli_x5=guli_x5+dy;
+
+
+		if(guli_x1>1520)
+		{
+		guli_x1=bakso_x;
+		guli_y1=bakso_y;
+		}
+
+		if(guli_x2>1860)
+				{
+					guli_x2=bakso_x;
+					guli_y2=bakso_y;
+				}
+
+				if(guli_x3>1710)
+						{
+							guli_x3=bakso_x;
+							guli_y3=bakso_y;
+						}
+					if(guli_x4>1160)
+							{
+								guli_x4=bakso_x;
+								guli_y4=bakso_y;
+							}
+					
+										if(guli_x5>1010)
+										{
+										guli_x5=bakso_x;
+										guli_y5=bakso_y;
+										}
+	}
+	void BoroGuliChange()
+{
+	guli_x6=guli_x6+dyy;
+if(guli_x6>2760)
+	{
+	guli_x6=bakso_x;
+	guli_y6=bakso_y;
+				}
+
+}
+
+
+
+	void MonsterChange()
+{
+	monster_x += ox;
+	monster_y += oy;
+
+	if(monster_x > 950 || monster_x <750)
+	{
+	ox = -ox;
+	}
+	if(monster_y > 850 || monster_y < 450)
+	{
+	oy = -oy;
+	}
+}
+
+	void MonsterGuliChange()
+		{
+			
+		Mguli_x1=Mguli_x1-mdy;
+		Mguli_x2=Mguli_x2-mdy;
+		Mguli_x3=Mguli_x3-mdy;
+		Mguli_x4=Mguli_x4-mdy;
+		Mguli_x5=Mguli_x5-mdy;
+
+
+		if(Mguli_x1<-1100)
+		{
+		Mguli_x1=monster_x;
+		Mguli_y1=monster_y;
+		}
+
+		if(Mguli_x2<-1260)
+				{
+					Mguli_x2=monster_x;
+					Mguli_y2=monster_y;
+				}
+
+				if(Mguli_x3<-1310)
+						{
+							Mguli_x3=monster_x;
+							Mguli_y3=monster_y;
+						}
+					if(Mguli_x4<-1460)
+							{
+								Mguli_x4=monster_x;
+								Mguli_y4=monster_y;
+							}
+					
+										if(Mguli_x5<-1510)
+										{
+										Mguli_x5=monster_x;
+										Mguli_y5=monster_y;
+										}
+	}
+	void MonsterBoroGuliChange()
+{
+	Mguli_x6=Mguli_x6-mdy;
+if(Mguli_x6<-2760)
+	{
+	Mguli_x6=monster_x;
+	Mguli_y6=monster_y;
+				}
+
+}
+
+int main()
+{
+	
+	pause1=iSetTimer(20,GhasChange_1);
+	pause2=iSetTimer(20,GhasChange_2);
+
+	pause3=iSetTimer(20,GhasChange_3);
+	
+	iSetTimer(20,GuliChange);
+	iSetTimer(15,BoroGuliChange);
+	iSetTimer(1,MonsterGuliChange);
+	iSetTimer(20,MonsterBoroGuliChange);
+
+	iSetTimer(90, MonsterChange);
+
+
+	iSetTimer(1, backGroundChange1);
+	iSetTimer(1, backGroundChange2);
+	iSetTimer(1, backGroundChange3);
+
+	dx = 5;
+	//dy = 5;
+
+	if(musicOn);
+	PlaySound("music\\Play1.wav",NULL,SND_LOOP | SND_ASYNC);
+
+
+	iInitialize(1000, 950, "Demo");
+
+	iStart(); // it will start drawing
+
+	return 0;
+}

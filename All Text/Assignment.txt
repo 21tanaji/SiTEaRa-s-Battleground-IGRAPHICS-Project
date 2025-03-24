@@ -1,0 +1,94 @@
+#include "iGraphics.h"
+
+ int circle_x =100, circle_y =100;
+ int rectangle_x =200,rectangle_y =200;
+
+ int dx,dy;
+ int circletimer,rectangletimer;
+
+void iDraw()
+{
+	iClear();
+
+    iSetColor(255, 100, 10);
+	iFilledCircle(circle_x,circle_y, 50);
+	iSetColor(0, 255, 0);
+    iFilledRectangle(rectangle_x, rectangle_y,100,50);
+	iSetColor(255, 255, 255);
+	iText(10, 10, "Press p for pause, r for resume, END for exit.");
+}
+
+void iMouseMove(int mx, int my)
+{
+	//place your codes here
+}
+
+void iPassiveMouse(int mx, int my)
+{
+	//place your codes here
+}
+
+void iMouse(int button, int state, int mx, int my)
+{
+	//place your codes here
+}
+
+
+void iKeyboard(unsigned char key)
+{
+	if(key == 'p')
+	{
+		//do something with 'q'
+		iPauseTimer(circletimer);
+       	iResumeTimer(rectangletimer);
+
+	}
+	if(key == 'r')
+	{
+		iResumeTimer(circletimer);
+        iPauseTimer(rectangletimer);
+
+	}
+}
+
+void iSpecialKeyboard(unsigned char key)
+{
+
+	if(key == GLUT_KEY_END)
+	{
+		exit(0);
+	}
+}
+
+void circleChange(){
+	circle_x += dx;
+
+	if(circle_x==400)
+	{
+		circle_x=0;
+	}
+
+}
+
+void rectangleChange(){
+	rectangle_x += dx;
+
+	if(rectangle_x==400)
+	{
+		rectangle_x=0;
+	}
+}
+
+
+int main()
+{
+	circletimer = iSetTimer(1, circleChange);
+	rectangletimer = iSetTimer(1, rectangleChange);
+
+	dx = 5;
+
+	iInitialize(400, 400, "Object Demo");
+    iStart();
+	return 0;
+}
+
